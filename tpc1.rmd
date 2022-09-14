@@ -1,0 +1,21 @@
+---
+title: "R Notebook"
+author: Plancha
+date: "2022-15-09"
+output:
+    html_document:
+        theme: readthedown
+---
+TODO adicionar ao html_document talvez toc: true
+# TPC1 - turma 2
+Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
+## 1
+> Crie o espaço de resultados para o exercício em causa, com a respetiva probabilidade
+```{r}
+dado1 <- data.frame(poss = 1:5, prob = rep(1/5))
+dado2 <- data.frame(poss = 1:10, prob = rep(1/10))
+S <- expand.grid(dado1 = dado1$poss, dado2 = dado2$poss)
+Sprobs <- expand.grid(dado1Probs = dado1$prob, dado2Probs = dado2$prob)
+S$prob <- Sprobs$dado1Probs * Sprobs$dado2Probs
+S
+```
