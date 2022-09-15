@@ -1,21 +1,37 @@
 ---
-title: "R Notebook"
-author: Plancha
-date: "2022-15-09"
+title: TPC1 – turma 2 - Resolução
+author: André Plancha - CBD2 - 105289
+date: 2022-15-09
+subject: TPC1 - turma 2
 output:
-    html_document:
-        theme: readthedown
+    pdf_document:
+        toc: false
+        number_sections: false
+        keep_tex: false
+        template: TEMPLATEPATH
+
 ---
-TODO adicionar ao html_document talvez toc: true
-# TPC1 - turma 2
-Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
-## 1
-> Crie o espaço de resultados para o exercício em causa, com a respetiva probabilidade
-```{r}
-dado1 <- data.frame(poss = 1:5, prob = rep(1/5))
+> Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
+
+Declaremos:
+
+* \(A_n\) como o lançamento do primeiro dado e calhar n, \( n \in \mathbb{N} \cap [1, 6] \)
+* \(B_n\) como o lançamento do segundo dado e calhar n, \( n \in \mathbb{N} \cap [1, 10] \)
+```{r results = FALSE, out.height = 10}
+#libraries
+library(tibble)
+
+dado1 <- data.frame(poss = 1:6, prob = rep(1/5))
 dado2 <- data.frame(poss = 1:10, prob = rep(1/10))
+```
+
+# 1
+> Crie o espaço de resultados para o exercício em causa, com a respetiva probabilidade
+
+A probabilidade do conjunto dos lançamentos vai ser o resultado da multiplicação das probabilidades de ca
+```{r}
 S <- expand.grid(dado1 = dado1$poss, dado2 = dado2$poss)
 Sprobs <- expand.grid(dado1Probs = dado1$prob, dado2Probs = dado2$prob)
 S$prob <- Sprobs$dado1Probs * Sprobs$dado2Probs
-S
+tibble(S)
 ```
