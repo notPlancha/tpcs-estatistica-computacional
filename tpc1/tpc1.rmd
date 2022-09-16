@@ -8,9 +8,10 @@ output:
         toc: false
         number_sections: false
         keep_tex: false
-        template: TEMPLATEPATH
-
+        template: "`r paste(here::here(), '/template/Eisvogel/eisvogel.latex')`"
+        temp: TODO https://stackoverflow.com/questions/45646135/evaluating-r-code-in-yaml-header
 ---
+
 > Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
 
 Declaremos:
