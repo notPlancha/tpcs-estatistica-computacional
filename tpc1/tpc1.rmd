@@ -7,17 +7,16 @@ output:
     pdf_document:
         toc: false
         number_sections: false
-        keep_tex: false
-        template: "`r paste(here::here(), '/template/Eisvogel/eisvogel.latex')`"
-        temp: TODO https://stackoverflow.com/questions/45646135/evaluating-r-code-in-yaml-header
+        keep_tex: true
+        template: "`r here::here('template', 'Eisvogel', 'esivogel.latex')`"
 ---
 
 > Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
 
 Declaremos:
 
-* \(A_n\) como o lançamento do primeiro dado e calhar n, \( n \in \mathbb{N} \cap [1, 6] \)
-* \(B_n\) como o lançamento do segundo dado e calhar n, \( n \in \mathbb{N} \cap [1, 10] \)
+* \(A_n\) como o lançamento do primeiro dado e calhar n, $n \in \mathbb{Z}_10$
+* \(B_n\) como o lançamento do segundo dado e calhar n, $n \in \mathbb{Z}_10$
 ```{r results = FALSE, out.height = 10}
 #libraries
 library(tibble)
