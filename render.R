@@ -17,7 +17,8 @@ for (i in toProcess){
       "-s", here("temp", paste0(i, ".knit.md")),
       "-o", here(i,      paste0(i, ".pdf")),
       "--pdf-engine", paste0(tinytex::tinytex_root(), "\\bin\\win32\\pdflatex.exe"),
-      "--template", here("template", "Eisvogel", "eisvogel.latex")
+      "--template", here("template", "Eisvogel", "eisvogel.latex"),
+      "--listings"
     )
   )
   print(paste("File outputed if no errors:", here(i,      paste0(i, ".pdf"))))

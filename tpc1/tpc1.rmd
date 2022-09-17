@@ -1,35 +1,81 @@
 ---
 title: TPC1 – turma 2 - Resolução
 author: André Plancha - CBD2 - 105289
-date: 2022-15-09
+date: 17/09/2022
 subject: TPC1 - turma 2
+header-includes:
+    - \usepackage{xfrac}
+listings-disable-line-numbers: true
+listings-no-page-break: true
 output:
     pdf_document:
         toc: false
         number_sections: false
+
 ---
 
 > Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
 
 Declaremos:
 
-* $A_n$ como o lançamento do primeiro dado e calhar n, $n \in \mathbb{Z}_10$
-* $B_n$ como o lançamento do segundo dado e calhar n, $n \in \mathbb{Z}_10$
+* $A_n$ como o lançamento do primeiro dado e calhar $\alpha$, $\alpha \in \mathbb{Z}_6$
+* $B_n$ como o lançamento do segundo dado e calhar $\beta$, $\beta \in \mathbb{Z}_{10}$
 ```{r results = FALSE, out.height = 10}
 #libraries
 library(tibble)
 
-dado1 <- data.frame(poss = 1:6, prob = rep(1/5))
-dado2 <- data.frame(poss = 1:10, prob = rep(1/10))
+dados1 <- data.frame(poss = 1:6, prob = rep(1/6))
+dados2 <- data.frame(poss = 1:10, prob = rep(1/10))
 ```
 
 # 1
 > Crie o espaço de resultados para o exercício em causa, com a respetiva probabilidade
 
-A probabilidade do conjunto dos lançamentos vai ser o resultado da multiplicação das probabilidades de ca
+A probabilidade do conjunto dos lançamentos vai ser o resultado da multiplicação das probabilidades de cada um dos dados lançados individualmente, pois os acontecimentos são independentes.
 ```{r}
-S <- expand.grid(dado1 = dado1$poss, dado2 = dado2$poss)
-Sprobs <- expand.grid(dado1Probs = dado1$prob, dado2Probs = dado2$prob)
+S <- expand.grid(dado1 = dados1$poss, dado2 = dados2$poss)
+Sprobs <- expand.grid(dado1Probs = dados1$prob, dado2Probs = dados2$prob)
 S$prob <- Sprobs$dado1Probs * Sprobs$dado2Probs
 tibble(S)
+```
+Como o lançamento de cada e calhar $\alpha$ ou $\beta$ (nos dados correspondidos) são equiprováveis, cada acontecimento deste espaço de resultados vai ser equiprovável também, sendo igual a $\sfrac{1}{6} \times \sfrac{1}{10}$
+
+# 2
+> Construa o acontecimento A – a soma dos pontos dos 2 dados é menordo que 8(ou seja, construa osubconjunto do espaço de resultados onde o somatório dos números obtidos é menordo que 8).
+```{r}
+A <- subset(S, dado1+dado2 < 8)
+tibble(A)
+```
+
+> Calcule a probabilidade de ocorrência deste acontecimento.
+
+```{r}
+sum(A$prob)
+```
+
+# 3
+> Construa o acontecimento B – os pontos dos dois dados são iguais (ou seja, crie o subconjunto do espaço de resultados onde os números do primeiro dado são iguais aos números do segundo dado).
+
+```{r}
+B <- subset(S, dado1 == dado2)
+tibble(B)
+```
+
+> Calcule a probabilidade de ocorrência deste acontecimento.
+
+```{r}
+sum(B$prob)
+```
+
+# 4
+> Calcule a probabilidade do acontecimento “A soma dos dois dados é menor do que 8 e os pontos dos dados são iguais”.
+```{r}
+C <- dplyr::intersect(A, B)
+sum(C$prob)
+```
+# 5
+> Calcule a probabilidade do acontecimento “A soma dos dois dados é menordo que 8 ou os pontos dos dois dados são iguais.
+```{r}
+D <- dplyr::union(A, B)
+sum(D$prob)
 ```
