@@ -1,6 +1,6 @@
 # I made a new render to get rid of the hack
 library(here)
-toProcess <- c("tpc1")
+toProcess <- c("tpc2")
 
 for (i in toProcess){
   rmarkdown::render(

@@ -18,8 +18,8 @@ output:
 
 Declaremos:
 
-* $A_n$ como o lançamento do primeiro dado e calhar $\alpha$, $\alpha \in \mathbb{Z}_6$
-* $B_n$ como o lançamento do segundo dado e calhar $\beta$, $\beta \in \mathbb{Z}_{10}$
+* $A_n$ como o lançamento do primeiro dado e calhar $n$, $n \in \mathbb{Z}_6$
+* $B_n$ como o lançamento do segundo dado e calhar $n$, $n \in \mathbb{Z}_{10}$
 ```{r results = FALSE, out.height = 10}
 #libraries
 library(tibble)
