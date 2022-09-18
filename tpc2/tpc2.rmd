@@ -24,18 +24,18 @@ library(psych)
 Sendo $D$ o meu acontecimento de, ao escolher um *cutefish* dessa barragem, esse peixe ser dourado, e $\overline{D}$ o peixe ser prateado:
 ```{=latex}
 \begin{alignat}{2}
-&P(D) &= 70\% = 0.7 \\
-&P(\overline{D}) = 1 - P(D) &= 30\% = 0.3
+&P(D) &= 30\% = 0.3 \\
+&P(\overline{D}) = 1 - P(D) &= 70\% = 0.7
 \end{alignat}
 ```
 
 ```{r}
 nPeixes <- 10000
-probDourado <- 0.7
-probPrateado <- 1-probDourado
-nPrateado <- probDourado*nPeixes
-nDourado <- nPeixes-nPrateado
-Peixes <- data.frame(cor= sample(c(rep("dourado", nDourado), rep("prateado", nPrateado))))
+probDourado <- 0.3
+probPrateado <- 0.7
+nPrateado <- probPrateado*nPeixes
+nDourado <- probDourado*nPeixes
+Peixes <- data.frame(tipo= sample(c(rep("dourado", nDourado), rep("prateado", nPrateado))))
 Hmisc::describe(Peixes)
 ```
 
@@ -57,19 +57,65 @@ probWmidDc <- 0.4
 probWcmidD <- 1 - probWmidD
 probWcmidDc <- 1 - probWmidDc
 Peixes$PesInf <- NA
-Peixes[Peixes$cor == "prateado",]$PesInf <- sample(c(rep(TRUE, nPrateado*probWmidDc), rep(FALSE, nPrateado*probWcmidDc)))
-Peixes[Peixes$cor == "dourado",]$PesInf <- sample(c(rep(TRUE, nDourado*probWmidD), rep(FALSE, nDourado*probWcmidD)))
-by(Peixes, Peixes$cor, summary)
+Peixes[Peixes$tipo == "prateado",]$PesInf <- sample(c(rep(TRUE, nPrateado*probWmidDc), rep(FALSE, nPrateado*probWcmidDc)))
+Peixes[Peixes$tipo == "dourado",]$PesInf <- sample(c(rep(TRUE, nDourado*probWmidD), rep(FALSE, nDourado*probWcmidD)))
+by(Peixes, Peixes$tipo, summary)
 ```
 
 # 1
 > Qual a proporção, naquela barragem,de cutefish com peso inferior ao regulamentado?
 
-A proporção de cutefish com peso inferior vai ser igual a $P(W)$. Sendo que só existem cutefish dourado e prateado na barragem, e sabemos a proporção de que cada um destes são de peso inferior, a proporção de peixe com menor peso será igual à soma dos peixes dourados e prateados com peso inferior, de acordo com a **Lei da Probabilidade Total**. Logo:
+A proporção de cutefish com peso inferior vai ser igual a $P(W)$. Sendo que só existem cutefish dourado e prateado na barragem, e sabemos a proporção de que cada um destes são de peso inferior, a proporção de peixe com menor peso será igual à soma dos peixes dourados e prateados com peso inferior, de atipodo com a **Lei da Probabilidade Total**. Logo:
 ```{=latex}
 \begin{align}
 P(W) &= P(W \mid D)P(D) + P(W \mid \overline{D})P(\overline{D}) \\
-P(W) &= 0.5 \cdot 0.7 + 0.4 \cdot 0.3 \\
-P(W) &= 0.225 = 22.5\%
+P(W) &= 0.5 \cdot 0.3 + 0.4 \cdot 0.7 \\
+P(W) &= 0.43 = 43\%
 \end{align}
+```
+
+```{r}
+nrow(Peixes[Peixes$PesInf == TRUE, ])/ nrow(Peixes)
+```
+
+# 2
+> Foi capturado um *cutefish* com peso inferior ao regulamentado. Qual a probabilidade de ser do tipo *cutefish* dourado?
+
+Usando o Teorema de Bayes,
+```{=latex}
+\begin{align}
+    P(D \mid W) &= \frac{P(W \mid D)P(D)}{P(W)}\\
+    P(D \mid W) &= \frac{0.5 \cdot 0.3}{0.43}\\
+    P(D \mid W) &= \frac{0.5 \cdot 0.3}{0.43}\\
+    P(D \mid W) &= \frac{15}{43} \approx 0.3488 = 34.88\%
+\end{align}
+```
+
+```{r}
+MASS::as.fractions(nrow(Peixes[Peixes$PesInf == TRUE & Peixes$tipo == "dourado",]) / nrow(Peixes[Peixes$PesInf == TRUE,]))
+```
+# 3
+> Qual a probabilidade de um *cutefish* capturado ser dourado e ter peso nos parâmetros desejados para a pesca desportiva?
+```{=latex}
+\begin{align}
+    P(D \cap W) &= P(D)P(W \mid D)
+    P(D \cap W) &= 0.3 \cdot 0.5
+    P(D \cap W) &= 0.15 = 15\%
+\end{align}
+```
+
+```{r}
+nrow(Peixes[Peixes$PesInf == TRUE & Peixes$tipo == "dourado",]) / nrow(Peixes)
+```
+# 4
+> Considere a experiência que consiste em capturar 5 *cutefish* (não interessa a subespécie, dourado ou prateado) e registar para cada um se tem ou não peso inferior ao regulamentado.
+## 4.1
+> Represente, através de um dataframe adequado,o espaço de resultados associado a esta experiência, com as probabilidades associadas(espaço de probabilidades).
+
+Como cada captura é independente da outra, a probabilidade
+```{r}
+S <- expand.grid(rep(list(c("dourado", "prateado")), 5))
+colnames(S) <- paste0("captura", 1:5)
+
+tibble(S)
 ```
