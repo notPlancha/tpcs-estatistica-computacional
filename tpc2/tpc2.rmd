@@ -17,6 +17,7 @@ output:
 #libraries
 library(tibble)
 library(psych)
+library(dplyr)
 ```
 
 > O *cutefish* existente numa certa barragem é identificado por 30% de *cutefish* dourado e 70% de *cutefish* prateado.
@@ -112,10 +113,32 @@ nrow(Peixes[Peixes$PesInf == TRUE & Peixes$tipo == "dourado",]) / nrow(Peixes)
 ## 4.1
 > Represente, através de um dataframe adequado,o espaço de resultados associado a esta experiência, com as probabilidades associadas(espaço de probabilidades).
 
-Como cada captura é independente da outra, a probabilidade
+Como cada captura é independente da outra, a probabilidade da captura dos 5 lançamentos será igual multiplicação da probabilidade de cada um dos lançamentos.
 ```{r}
-S <- expand.grid(rep(list(c("dourado", "prateado")), 5))
+S <- expand.grid(rep(list(c(0.43, 1-0.43)), 5))
 colnames(S) <- paste0("captura", 1:5)
 
+#S <- data.frame(apply(S, 1, function (x){
+#  x$probs <- prod(x[paste0("captura", 1:5)])
+#  x
+#}))
+S <- S %>% mutate(prob = captura1* captura2* captura3* captura4* captura5)
+S <- S %>% mutate_at(.vars = 1:5, .funs = function (x){
+  if_else(x == 0.43, 1, 0)
+})
 tibble(S)
+```
+Nesta tabela, 1 indica que o peixe é de peso inferior ao regulamento, e 0 o contrário.
+
+## 4.2
+> Explicite a partir do dataframe construído, o acontecimento A – no máximo 2 (dos 5) *cutefish* têm peso inferior ao regulamentado.
+```{r}
+S$sumProbs <- rowSums(S[1:5])
+A <- subset(S, sumProbs <= 2)
+print(tibble(A))
+```
+> Calcule a respetiva probabilidade de ocorrência.
+
+```{r}
+sum(A$prob)
 ```
