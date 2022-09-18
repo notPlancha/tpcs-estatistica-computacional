@@ -1,0 +1,29 @@
+---
+title: TPC2 – turma 2 - Resolução
+author: André Plancha - CBD2 - 105289
+date: 17/09/2022
+subject: TPC1 - turma 2
+header-includes:
+    - \usepackage{xfrac}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+    pdf_document:
+        toc: false
+        number_sections: false
+---
+
+> O *cutefish* existente numa certa barragem é identificado por 30% de *cutefish* dourado e 70% de *cutefish* prateado.
+
+Sendo $D$ o meu acontecimento de, ao escolher um *cutefish* dessa barragem, esse peixe ser dourado, e $\overline{D}$ o peixe ser prateado:
+
+$$ P(D) = 1 - P(\overline{D}) = 70\% $$
+
+> Da  experiência  passada, sabe-se que 50% de *cutefish* dourado nessa barragem tem peso inferior ao estabelecido nos regulamentos de pesca desportiva, enquanto que, no *cutefish* prateado, esse valor é de 40%.
+
+Sendo $W$ o meu acontecimento de, ao escolher um *cutefish* dessa barragem, esse ter peso inferior ao estabelecido nos regulamentos:
+
+
+$$ P(W \mid D) = 50\% $$
+$$ P(W \mid \overline{D}) = 40\% $$
+
