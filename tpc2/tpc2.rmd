@@ -2,7 +2,7 @@
 title: TPC2 – turma 2 - Resolução
 author: André Plancha - CBD2 - 105289
 date: 17/09/2022
-subject: TPC1 - turma 2
+subject: TPC2 - turma 2
 header-includes:
     - \usepackage{xfrac}
 listings-disable-line-numbers: true

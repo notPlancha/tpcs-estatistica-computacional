@@ -1,0 +1,102 @@
+---
+title: TPC3 – turma 2 - Resolução
+author: André Plancha - CBD2 - 105289
+date: 17/09/2022
+subject: TPC3 - turma 2
+header-includes:
+    - \usepackage{xfrac}
+    # - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+    pdf_document:
+        toc: false
+        number_sections: false
+---
+```{r results = FALSE, message=FALSE}
+#libraries
+library(tibble)
+library(psych)
+library(dplyr)
+library(MASS)
+```
+
+
+
+> Experiência: Lançamento de um dado de 6 faces e equilibrado,duas vezes
+
+```{r}
+dado <- c(1,2,3,4,5,6)
+omega <- expand.grid(dado1= dado, dado2= dado)
+omega$prob <- 1/nrow(omega)
+tibble(omega)
+```
+
+> U – Soma dos valores dos dois lançamentos
+```{r}
+omega$U <- omega$dado1 + omega$dado2
+tibble(omega)
+```
+
+# 1
+> Construir um dataframe que contenha, na primeira coluna, os valores possíveis para esta variável e, na segunda, as respetivas probabilidades de ocorrência, ou seja a função de probabilidade, $f(u)$.
+
+```{r}
+#fp <- omega %>% group_by(U) %>% summarise(fp = n()/36)
+fp <- aggregate(prob ~ U, data = omega, FUN = sum)
+tibble(fp)
+```
+# 2
+> Representar graficamente a função de probabilidade.
+```{r plot-funcao-probabilidades}
+plot(fp$U, fp$prob, type = "h", xlab = "U", ylab = "f(u)")
+```
+
+# 3
+> Obter a função de distribuição, $F(u)$, nos pontos de probabilidade não nula de U.
+
+```{r}
+Fu <- cumsum(fp$prob)
+tibble(U = fp$U, Fu = Fu)
+```
+
+# 4
+
+TODO
+
+
+# 5
+> Representar graficamente a função dedistribuição.
+```{r plot-funcao-distribuicao}
+plot(fp$U, Fu, type = "s", xlab = "U", ylab = "F(u)")
+```
+# 6
+> Qual a probabilidade de obter uma soma de pelo menos 7 e não mais do que 10, no lançamento de dois dados equilibrados?
+```{r}
+# P(7<=U<=10)
+# Com recurso a funcao de probabilidade
+print(fractions(sum(fp$prob[fp$U >= 7 & fp$U <= 10])))
+# Com recurso a funcao de distribuiao
+print(fractions(Fu[which(fp$U == 10)] - Fu[which(fp$U == 7-1)]))
+```
+
+# 7
+> Repetir 6, para um resultado maior que 7 e não mais do que 10
+
+```{r}
+#P(7<U<=10)
+#Com recurso a funcao de probabilidade
+print(fractions(sum(fp$prob[fp$U > 7 & fp$U <= 10])))
+#Com recurso a funcao de distribuiaoo
+print(fractions(Fu[which(fp$U == 10)] - Fu[which(fp$U == 7)]))
+```
+
+# 8
+> Repetir 6, para um resultado maior que 7 e menor que 10
+```{r}
+#P(7<U<10)
+#Com recurso a funcao de probabilidade
+print(fractions(sum(fp$prob[fp$U > 7 & fp$U < 10])))
+#Com recurso a funcao de distribuicao
+print(fractions(Fu[which(fp$U == 10-1)] - Fu[which(fp$U == 7)]))
+```
