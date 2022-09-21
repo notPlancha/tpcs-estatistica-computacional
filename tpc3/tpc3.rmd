@@ -19,6 +19,8 @@ library(tibble)
 library(psych)
 library(dplyr)
 library(MASS)
+
+
 ```
 
 
@@ -75,9 +77,9 @@ plot(fp$U, Fu, type = "s", xlab = "U", ylab = "F(u)")
 ```{r}
 # P(4<=U<=7)
 # Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U >= 4 & fp$U <= 7])))
+print(sum(fp$prob[fp$U >= 4 & fp$U <= 7]))
 # Com recurso a funcao de distribuiao
-print(fractions(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4-1)]))
+print(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4-1)])
 ```
 
 # 7
@@ -86,17 +88,31 @@ print(fractions(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4-1)]))
 ```{r}
 #P(4<U<=7)
 #Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U > 4 & fp$U <= 7])))
+print(sum(fp$prob[fp$U > 4 & fp$U <= 7]))
 #Com recurso a funcao de distribuiaoo
-print(fractions(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4)]))
+print(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4)])
 ```
 
 # 8
 > Repetir 6, para um resultado maior que 4 e menor que 7
+
 ```{r}
 #P(4<U<7)
 #Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U > 4 & fp$U < 7])))
+print(sum(fp$prob[fp$U > 4 & fp$U < 7]))
 #Com recurso a funcao de distribuicao
-print(fractions(Fu[which(fp$U == 7-1)] - Fu[which(fp$U == 4)]))
+print(Fu[which(fp$U == 7-1)] - Fu[which(fp$U == 4)])
+```
+# 9
+> Calcular a média, a variância e o desvio-padrão de U, pelas fórmulas gerais do valor esperado e da variância.
+
+```{r}
+#media
+media <- sum(fp$U * fp$prob)
+#variancia
+variancia <- sum((fp$U - media)^2 * fp$prob)
+#desvio padrao
+desvio_padrao <- sqrt(variancia)
+tibble(media, variancia, desvio_padrao)
+
 ```
