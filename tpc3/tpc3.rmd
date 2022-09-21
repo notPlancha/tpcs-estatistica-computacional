@@ -26,7 +26,7 @@ library(MASS)
 > Experiência: Lançamento de um dado de 6 faces e equilibrado,duas vezes
 
 ```{r}
-dado <- c(1,2,3,4,5,6)
+dado <- c(1,2,3,4)
 omega <- expand.grid(dado1= dado, dado2= dado)
 omega$prob <- 1/nrow(omega)
 tibble(omega)
@@ -71,32 +71,32 @@ TODO
 plot(fp$U, Fu, type = "s", xlab = "U", ylab = "F(u)")
 ```
 # 6
-> Qual a probabilidade de obter uma soma de pelo menos 7 e não mais do que 10, no lançamento de dois dados equilibrados?
+> Qual a probabilidade de obter uma soma de pelo menos 4 e não mais do que 7, no lançamento de dois dados equilibrados?
 ```{r}
-# P(7<=U<=10)
+# P(4<=U<=7)
 # Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U >= 7 & fp$U <= 10])))
+print(fractions(sum(fp$prob[fp$U >= 4 & fp$U <= 7])))
 # Com recurso a funcao de distribuiao
-print(fractions(Fu[which(fp$U == 10)] - Fu[which(fp$U == 7-1)]))
+print(fractions(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4-1)]))
 ```
 
 # 7
-> Repetir 6, para um resultado maior que 7 e não mais do que 10
+> Repetir 6, para um resultado maior que 4 e não mais do que 7
 
 ```{r}
-#P(7<U<=10)
+#P(4<U<=7)
 #Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U > 7 & fp$U <= 10])))
+print(fractions(sum(fp$prob[fp$U > 4 & fp$U <= 7])))
 #Com recurso a funcao de distribuiaoo
-print(fractions(Fu[which(fp$U == 10)] - Fu[which(fp$U == 7)]))
+print(fractions(Fu[which(fp$U == 7)] - Fu[which(fp$U == 4)]))
 ```
 
 # 8
-> Repetir 6, para um resultado maior que 7 e menor que 10
+> Repetir 6, para um resultado maior que 4 e menor que 7
 ```{r}
-#P(7<U<10)
+#P(4<U<7)
 #Com recurso a funcao de probabilidade
-print(fractions(sum(fp$prob[fp$U > 7 & fp$U < 10])))
+print(fractions(sum(fp$prob[fp$U > 4 & fp$U < 7])))
 #Com recurso a funcao de distribuicao
-print(fractions(Fu[which(fp$U == 10-1)] - Fu[which(fp$U == 7)]))
+print(fractions(Fu[which(fp$U == 7-1)] - Fu[which(fp$U == 4)]))
 ```
