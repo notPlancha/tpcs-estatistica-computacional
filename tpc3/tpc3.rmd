@@ -64,7 +64,11 @@ tibble(U = fp$U, Fu = Fu)
 
 # 4
 
-TODO
+```{=latex}
+\begin{alignat} {2}
+    &TODO&TODO
+\end{alignat}
+```
 
 
 # 5
