@@ -5,6 +5,8 @@ date: 17/09/2022
 subject: TPC3 - turma 2
 header-includes:
     - \usepackage{xfrac}
+    - \usepackage{comment}
+    - \usepackage{amsmath}
     # - \usepackage[cp1251]{inputenc}
 listings-disable-line-numbers: true
 listings-no-page-break: true
@@ -16,16 +18,13 @@ output:
 ```{r results = FALSE, message=FALSE}
 #libraries
 library(tibble)
-library(psych)
 library(dplyr)
-library(MASS)
-
 
 ```
 
 
 
-> Experiência: Lançamento de um dado de 6 faces e equilibrado,duas vezes
+> Experiência: Lançamento de um dado de 6 faces e equilibrado, duas vezes
 
 ```{r}
 dado <- c(1,2,3,4)
@@ -51,7 +50,8 @@ tibble(fp)
 # 2
 > Representar graficamente a função de probabilidade.
 ```{r plot-funcao-probabilidades}
-plot(fp$U, fp$prob, type = "h", xlab = "U", ylab = "f(u)")
+plot(fp$U, fp$prob, type = "h", xlab = "U", ylab = "f(u)", col="light grey")
+points(fp$U, fp$prob, pch=16, col="black")
 ```
 
 # 3
@@ -64,17 +64,33 @@ tibble(U = fp$U, Fu = Fu)
 
 # 4
 
+> Escrever a função de distribuição (com todos os seus ramos).
+
 ```{=latex}
-\begin{alignat} {2}
-    &TODO&TODO
-\end{alignat}
+\begin{comment}
+this could be done with R but it's not worth it
+\end{comment}
+$$
+F(x) =
+\begin{cases}
+    0 & x < 2 \\
+    0.0625 & 2 \leq x < 3 \\
+    0.1875 & 3 \leq x < 4 \\
+    0.375 & 4 \leq x < 5 \\
+    0.625 & 5 \leq x < 6 \\
+    0.8125 & 6 \leq x < 7 \\
+    0.9375 & 7 \leq x < 8 \\
+    1 & x \geq 8
+\end{cases}
+$$
 ```
 
 
 # 5
-> Representar graficamente a função dedistribuição.
+> Representar graficamente a função de distribuição.
 ```{r plot-funcao-distribuicao}
-plot(fp$U, Fu, type = "s", xlab = "U", ylab = "F(u)")
+plot(stepfun(fp$U, c(0, Fu), right=TRUE), verticals = FALSE, xlab="U", ylab="F(U)", main = "")
+points(fp$U, Fu, pch=16, col="black")
 ```
 # 6
 > Qual a probabilidade de obter uma soma de pelo menos 4 e não mais do que 7, no lançamento de dois dados equilibrados?
