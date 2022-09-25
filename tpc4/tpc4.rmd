@@ -1,0 +1,100 @@
+---
+title: TPC4 – turma 2 - Resolução
+author: André Plancha - CDB2 - 105289
+date: 24/09/2022
+subject: TPC4 - turma 2
+header-includes:
+    - \usepackage{xfrac}
+    - \usepackage{comment}
+    - \usepackage{amsmath}
+    - \usepackage{siunitx}
+
+    # - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+    pdf_document:
+        toc: false
+        number_sections: false
+---
+# 1
+TODO
+
+# 2
+> Considere que a procura diária, num certo supermercado, do novo artigo de limpeza, X, lançado no mês passado pela empresa TudoBrilha, pode ser modelizada através de uma variável aleatória com distribuição de Poisson de média 3,1.
+
+A função de probabilidade da variável aleatória $X$, numa **distribuição de Poisson**, é dada por:
+
+```{=latex}
+\begin{align}
+&f(k, \lambda) = P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}, \qquad k \in \mathbb{N} _0 \label{eq:poisson}
+\end{align}
+```
+, sendo $\lambda$ a distribuição média dos Eventos.
+
+Quando se avalia a probabilidade da variável aleatória $X$ ao longo de um tempo $t$, está-se perante um **processo de Poisson**, e a função de probabilidade é dada por:
+
+```{=latex}
+\begin {align}
+&P(N(t) = k) = \frac{\Lambda^k e^{-\Lambda}}{k!} \qquad k \in \mathbb{N} _0 \label{eq:poisson}
+\end{align}
+```
+,sendo $\Lambda$ a forma da distribuição, representando a taxa média de ocorrência do evento $X$ durante um tempo $t$. Logo, $\Lambda = \lambda t$.
+
+Neste cenário,
+```{=latex}
+\begin {align} \lambda = 3.1\si{\per\day} \end{align}
+```
+
+```{r}
+lamb <- 3.1
+```
+
+## Requesitos
+> Em cada exercício
+>
+> 1. Defina teoricamente a variável aleatória de interesse
+> 2. Especifique teoricamente o modelo probabilístico em causa
+> 3. Explicite teoricamente a probabilidade pedida
+> 4. Calcule a probabilidade pedida, recorrendo a funções R apropriadas.
+
+## Resoluções
+### a)
+> a) Qual a probabilidade de, num dia, a procura de X ser no máximo 3?
+
+Sendo $A$ o evento de a procura ser no máximo 3 em um dia, temos que:
+
+```{=latex}
+\begin{alignat}{1}
+P(A) = &P(X \leq 3) = P(X = 0) + P(X = 1) + P(X = 2) + P(X = 3)
+\end{alignat}
+```
+Conforme a Eq. \ref{eq:poisson}, temos que:
+
+```{=latex}
+\begin{alignat}{1}
+P(A) &= \frac{\lambda^0 e^{-\lambda}}{0!} + \frac{\lambda^1 e^{-\lambda}}{1!} + \frac{\lambda^2 e^{-\lambda}}{2!} + \frac{\lambda^3 e^{-\lambda}}{3!} \\
+&= e^{-\lambda} \left(1 + \lambda + \frac{\lambda^2}{2} + \frac{\lambda^3}{6}\right)
+\end{alignat}
+```
+
+```{r}
+print(dpois(0, lamb) + dpois(1, lamb) + dpois(2, lamb) + dpois(3, lamb))
+print(exp(-lamb) * (1 + lamb + lamb^2/2 + lamb^3/6))
+```
+
+Logo, a probabilidade de, num dia, a procura de X ser no máximo 3 em um dia é de 0.625.
+
+### b)
+> Qual a probabilidade de, numa semana (7 dias) a procura ser no mínimo 22?
+
+Sendo $B$ o evento de a procura ser no mínimo 22 numa semana, temos que:
+
+```{=latex}
+\begin{alignat}{1}
+P(B) = P(X \geq 22) &= 1 - P(X < 22) \\
+                    &= 1 - \sum_{k=0}^{21} P(X = k)
+\end{alignat}
+```
+
+TODO resto

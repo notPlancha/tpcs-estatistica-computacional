@@ -1,7 +1,7 @@
 # I made a new render to get rid of the hack
 library(here)
 toProcess <- commandArgs(TRUE)
-if (length(toProcess) == 0) toProcess <- c("tpc1", "tpc2", "tpc3")
+if (length(toProcess) == 0) toProcess <- c("tpc1", "tpc2", "tpc3", "tpc4")
 
 for (i in toProcess){
   rmarkdown::render(
