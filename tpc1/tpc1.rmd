@@ -1,7 +1,7 @@
 ---
 title: TPC1 – turma 2 - Resolução
-author: André Plancha - CBD2 - 105289
-date: 17/09/2022
+author: André Plancha - CDB2 - 105289
+date: 24/09/2022
 subject: TPC1 - turma 2
 header-includes:
     - \usepackage{xfrac}
@@ -16,7 +16,7 @@ output:
 
 > Considere a experiência aleatória na qual é efetuado o lançamento de dois dados, o primeiro com 5 faces, numeradas de 1 a 5, equilibrado; o segundo com 10 faces, numeradas de 1 a 10, também equilibrado.
 
-Declaremos:
+Sejam:
 
 * $A_n$ como o lançamento do primeiro dado e calhar $n$, $n \in \mathbb{Z}_6$
 * $B_n$ como o lançamento do segundo dado e calhar $n$, $n \in \mathbb{Z}_{10}$
