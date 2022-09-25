@@ -29,9 +29,6 @@ P(X>100) &= \sum_{x=101}^{200} \left(\binom{200}{x} \left(0.4\right)^x \left(0.6
 \end{align}
 ```
 
-```{=latex}
-```
-
 ## i) recorrendo a uma função r apropriada
 
 ```{r}
@@ -41,7 +38,8 @@ sum(dbinom(101:200, 200, 0.4))
 ## ii) através de uma simulação com 10000 repetições.
 
 ```{r}
-
+n <- 10000
+length(which(rbinom(n, 200, 0.4) > 100))/n
 ```
 
 # 2
