@@ -18,7 +18,31 @@ output:
         number_sections: false
 ---
 # 1
-TODO
+> Um analista político acredita que a privatização de alguns sectores estratégicos no domínio do sector público é um tema polémico e afirma que somente 40% dos indivíduos têm uma opinião favorável.
+> Se um entrevistador conseguir contactar 200 pessoas numa semana qual a probabilidade de encontrar mais de 100 indivíduos com opinião favorável às privatizações, se o analista tiver razão quanto à incidência de opiniões favoráveis?
+
+Se o analista tiver razão,
+
+```{=latex}
+\begin{align}
+P(X>100) &= \sum_{x=101}^{200} \left(\binom{200}{x} \left(0.4\right)^x \left(0.6\right)^{200-x}\right)
+\end{align}
+```
+
+```{=latex}
+```
+
+## i) recorrendo a uma função r apropriada
+
+```{r}
+sum(dbinom(101:200, 200, 0.4))
+```
+
+## ii) através de uma simulação com 10000 repetições.
+
+```{r}
+
+```
 
 # 2
 > Considere que a procura diária, num certo supermercado, do novo artigo de limpeza, X, lançado no mês passado pela empresa TudoBrilha, pode ser modelizada através de uma variável aleatória com distribuição de Poisson de média 3,1.
@@ -36,7 +60,7 @@ Quando se avalia a probabilidade da variável aleatória $X$ ao longo de um temp
 
 ```{=latex}
 \begin {align}
-&P(N(t) = k) = \frac{\Lambda^k e^{-\Lambda}}{k!} \qquad k \in \mathbb{N} _0 \label{eq:poisson}
+&P(N(t) = k) = \frac{\Lambda^k e^{-\Lambda}}{k!} \qquad k \in \mathbb{N} _0 \label{eq:poissonProcess}
 \end{align}
 ```
 ,sendo $\Lambda$ a forma da distribuição, representando a taxa média de ocorrência do evento $X$ durante um tempo $t$. Logo, $\Lambda = \lambda t$.
@@ -83,7 +107,7 @@ print(dpois(0, lamb) + dpois(1, lamb) + dpois(2, lamb) + dpois(3, lamb))
 print(exp(-lamb) * (1 + lamb + lamb^2/2 + lamb^3/6))
 ```
 
-Logo, a probabilidade de, num dia, a procura de X ser no máximo 3 em um dia é de 0.625.
+Logo, a probabilidade de, num dia, a procura de X ser no máximo 3 em um dia é cerca de 0.625.
 
 ### b)
 > Qual a probabilidade de, numa semana (7 dias) a procura ser no mínimo 22?
@@ -97,4 +121,48 @@ P(B) = P(X \geq 22) &= 1 - P(X < 22) \\
 \end{alignat}
 ```
 
-TODO resto
+Conforme a Eq. \ref{eq:poissonProcess}, temos que:
+
+```{=latex}
+\begin{align}
+P(B) &= 1 - \sum_{k=0}^{21} \frac{\Lambda^k e^{-\Lambda}}{k!}  \\
+     &= 1 - \sum_{k=0}^{21} \frac{\lambda t^k}{k!} e^{-\lambda t} \\
+     &= 1 - \sum_{k=0}^{21} \frac{(3.1 \cdot 7)^k}{k!} e^{-3.1 \cdot 7}
+\end{align}
+```
+
+```{r}
+print(1 - sum(dpois(0:21, lamb*7)))
+print(1 - sum(((3.1*7)^(0:21)/factorial(0:21)) * exp(-3.1*7)))
+```
+
+Logo, a probabilidade de, numa semana (7 dias) a procura ser no mínimo 22 é cerca de 0.503.
+
+### c)
+> Qual a probabilidade de, em 7 dias, ocorrerem no máximo 4 dias onde a procura diária é no máximo 3?
+
+Para resolver esta questão, será usado a distribuição binomial, pois esta é usada para avaliar a probabilidade de um certo número de sucessos em um certo número de tentativas independentes.
+
+A distribuição binomial é dada por:
+```{=latex}
+\begin{align}
+P(k;p,n) = \binom{n}{k} p^k (1-p)^{n-k}, \qquad k \in \mathbb{N} _0
+\end{align}
+```
+, sendo $p$ a probabilidade de sucesso, $n$ o número de tentativas e $k$ o número de sucessos.
+
+Sendo $C$ o evento de ocorrerem no máximo 4/7 dias onde a procura diária é no máximo 3,  temos que:
+
+```{=latex}
+\begin{align}
+P(C) &= \sum_{k=0}^{4} P(k;P(A), 7) \\
+     &= \sum_{k=0}^{4} \binom{7}{k} P(A)^k (1-P(A))^{7-k}
+\end{align}
+```
+
+
+```{r}
+n <- 7
+x <- 0:4
+print(sum(dbinom(x, n, sum(dpois(0:3, lamb)))))
+```
