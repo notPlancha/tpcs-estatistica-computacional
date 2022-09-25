@@ -122,7 +122,7 @@ colnames(S) <- paste0("captura", 1:5)
 #  x$probs <- prod(x[paste0("captura", 1:5)])
 #  x
 #}))
-S <- S %>% mutate(prob = captura1* captura2* captura3* captura4* captura5)
+S$prob <- apply(S, 1, prod)
 S <- S %>% mutate_at(.vars = 1:5, .funs = function (x){
   if_else(x == 0.43, 1, 0)
 })
