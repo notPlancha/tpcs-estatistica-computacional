@@ -1,0 +1,84 @@
+---
+title: TPC5 – turma 2 - Resolução
+author: André Plancha - CDB2 - 105289
+date: 30/09/2022
+subject: TPC5 - turma 2
+header-includes:
+    - \usepackage{xfrac}
+    - \usepackage{comment}
+    - \usepackage{amsmath}
+    - \usepackage{siunitx}
+
+    - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
+
+    # - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+    pdf_document:
+        toc: false
+        number_sections: false
+---
+
+
+> Sabe-se que nos municípios de uma certa região turística, 40% [destes municípios] mais que duplicam a população nos meses de verão.
+>
+> Suponha que o *acréscimo no consumo de água por cada turista alojado, por dia*, pode ser descrito através de uma variável aleatória [$X$] com distribuição Normal, de média 0,50 m3 e desvio padrão 0,05 m3.
+
+A função de distribuição de probabilidade de uma variável aleatória $X$ com distribuição Normal é dada por:
+
+```{=latex}
+\begin{align}
+F(x | \mu, \sigma) &= \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)
+\end{align}
+```
+Logo, a função de distribuição de probabilidade de $X$ é dada por:
+```{=latex}
+\begin{align}
+F(x | \mu = 0.5, \sigma = 0.05) &= \frac{1}{0.05\sqrt{2 \pi}} \exp \left( - \frac{(x - 0.5)^2}{2 (0.05)^2} \right) \\
+F(x | \mu = 0.5, \sigma = 0.05) &= 20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \exp \left( - \frac{(x - 0.5)^2}{0.005} \right)
+\end{align}
+```
+
+# a)
+> Qual a probabilidade do acréscimo no consumo, por turista e por dia, ser inferior a 0,437 m3?
+
+A probabilidade de $P(a < X < b)$ é dada por:
+```{=latex}
+\begin{align}
+P\{a < X \le b\} &= F(b) - F(a) \\
+               &= \int_a^b f(t)\,dt \label{eq:probabilidade_intervalo}
+\end{align}
+```
+, logo, a probabilidade de $X$ ser inferior a 0,437 m3 é dada por:
+```{=latex}
+\begin{align}
+    P\{X < 0,437\} &= 20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \int_{-\infty}^{0.437} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt
+\end{align}
+```
+
+```{r}
+intF <- function(x) {
+    exp(-((x - 0.5)^2) / 0.005)
+}
+print(20* (2 * pi)^(-1/2) * integrate(intF, lower = -Inf, upper = 0.437)$value)
+print(pnorm(0.437, mean = 0.5, sd = 0.05, lower.tail = TRUE))
+```
+
+# b)
+> Calcule o maior acréscimo de consumo dos 25% menores acréscimos.
+
+Conforme a Eq. \ref{eq:probabilidade_intervalo},
+```{=latex}
+\begin{align}
+P\{X \le x\} &= 0.25 \\[3pt]
+20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \int_{-\infty}^{x} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt &= 0.25 \\[3pt]
+\int_{-\infty}^{x} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt &= 0.0125(2 \pi)^{ \sfrac{1}{2}}
+\end{align}
+```
+
+```{r}
+rightVal <- 0.0125 * (2 * pi)^(1/2)
+print(pracma::bisect(function(x) integrate(intF, lower = -Inf, upper = x)$value - rightVal, 0, 1)$root)
+print(qnorm(0.25, mean = 0.5, sd = 0.05, lower.tail = TRUE))
+```

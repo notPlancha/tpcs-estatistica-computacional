@@ -1,7 +1,8 @@
+LASTTPC <- 5
 # I made a new render to get rid of the hack
 library(here)
 toProcess <- commandArgs(TRUE)
-if (length(toProcess) == 0) toProcess <- c("tpc1", "tpc2", "tpc3", "tpc4")
+if (length(toProcess) == 0) toProcess <- paste0("tpc", 1:LASTTPC)
 
 for (i in toProcess){
   rmarkdown::render(
