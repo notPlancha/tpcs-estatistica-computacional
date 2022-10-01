@@ -29,14 +29,14 @@ A função de densidade de probabilidade de uma variável aleatória $X \sim N(\
 
 ```{=latex}
 \begin{align}
-f(x | \mu, \sigma^2) &= \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)
+f(x | \mu, \sigma^2) &= \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right) \label{eq:fdn}
 \end{align}
 ```
-Logo, a função de distribuição [comulativa] de probabilidade de $X \sim N(0.5,0.05)$ é dada por:
+Logo, a função de distribuição [comulativa] de probabilidade de $X \sim N(0.5,0.05^2)$ é dada por:
 ```{=latex}
 \begin{align}
 F(x) = P\{ X \le x\}
-    &= \int_{-\infty}^x f(t | \mu = 0.5, \sigma^2 = 0.05)\,dt
+    &= \int_{-\infty}^x f(t | \mu = 0.5, \sigma^2 = 0.05^2)\,dt
     \\&=
         \frac{1}{0.05\sqrt{2 \pi}}
         \int_{-\infty}^x \exp \left( - \frac{(t - 0.5)^2}{2 (0.05)^2} \right)\,dt
@@ -94,28 +94,38 @@ print(qnorm(0.25, mean = 0.5, sd = 0.05, lower.tail = TRUE))
 # c)
 > Numa certa unidade de turismo rural casa, a capacidade é de 20 hóspedes. Considerando um momento em que a unidade está totalmente cheia, qual a probabilidade do consumo de água diário aumentar em pelo menos 10,75 m3 (quando comparado com a situação em que não existem hóspedes)?
 
-Sendo $Y = 20X$ e $G$ a função de distribuição de probabilidade de $Y$, temos que:
+Se $X_1, X_2, \dots, X_{n}$ forem variáveis normais independentes com médias $\mu_1, \mu_2, \dots, \mu_n$ e variâncias $\sigma_1^2, \sigma_2^2, \dots, \sigma_n^2$,
+
 ```{=latex}
 \begin{align}
-G(x) &= P\{Y \le x\} \\
-     &= P\{20X \le x\} \\
-     &= P\{X \le \frac{x}{20}\} \\
-     &= F\left(\frac{x}{20}\right)
+T=\sum_{i=1}^n a_i X_i \sim N \left(\sum_{i=1}^n a_i \mu_i, \sqrt{\sum_{i=1}^n a_i^2\sigma_i^2}\right) \label{eq:var_normais}
 \end{align}
 ```
 
-Conforme a Eq. \ref{eq:probabilidade_intervalo},
+Como $a_i = 1 \land \mu_i = \mu = 0.5 \land \sigma_n^2 = \sigma^2 = 0.05^2$,
 
 ```{=latex}
 \begin{align}
-P\{X > \frac{10.75}{20}\} &= 1 - P\{X \le 0.5375\} \\
-                &= 1 - \left( 20(2 \pi)^{ \unaryminus \sfrac{1}{2}}\int_{-\infty}^{0.5375} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt \right)
+T = 20X &\sim N(20 \mu, \sqrt{20 \sigma^2})
+\end{align}
+```
+
+Conforme a Eq. \ref{eq:fdn},
+```{=latex}
+\begin{align}
+P\{T > 10.75\} &= 1 - P\{T \le 10.75\} \\
+               &= 1 - \int_{-\infty}^{10.75} f(t | \mu = 20 \cdot 0.5, \sigma^2 = \sqrt{20} \cdot 0.05)\,dt \\
+               &= 1 - \int_{-\infty}^{10.75} f(t | \mu = 10, \sigma^2 = 0.1 \sqrt{5})\,dt \\
+               &= 1 - \frac{1}{\sqrt{2 \pi (0.1 \sqrt{5})}} \int_{-\infty}^{10.75} \exp \left( - \frac{(t - 10)^2}{2 \cdot 0.1 \sqrt{5}} \right)\,dt
 \end{align}
 ```
 
 ```{r}
-print(1 - 20 * (2 * pi)^(-1/2) * integrate(intF, lower = -Inf, upper = 10.75/20)$value)
-print(1 - pnorm(10.75/20, mean = 0.5, sd = 0.05, lower.tail = TRUE))
+intT <- function(x) {
+    exp(-((x - 10)^2) / (2 * 0.1 * sqrt(5)))
+}
+print(1 - (1/sqrt(2*pi * 0.1 * sqrt(5))) * integrate(intT, lower = -Inf, upper = 10.75)$value)
+print(1 - pnorm(10.75, mean = 20*0.5, sd = sqrt(20)*0.05, lower.tail = TRUE))
 ```
 
 # d)
