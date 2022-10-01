@@ -8,9 +8,9 @@ header-includes:
     - \usepackage{comment}
     - \usepackage{amsmath}
     - \usepackage{siunitx}
-
     - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
-
+    - \DeclareSIUnit{\tourist}{t}
+    - \DeclareSIUnit{\thisUnit}{\cubic\metre\per\tourist\per\day}
     # - \usepackage[cp1251]{inputenc}
 listings-disable-line-numbers: true
 listings-no-page-break: true
@@ -23,37 +23,45 @@ output:
 
 > Sabe-se que nos municípios de uma certa região turística, 40% [destes municípios] mais que duplicam a população nos meses de verão.
 >
-> Suponha que o *acréscimo no consumo de água por cada turista alojado, por dia*, pode ser descrito através de uma variável aleatória [$X$] com distribuição Normal, de média 0,50 m3 e desvio padrão 0,05 m3.
+> Suponha que *o consumo de água por cada turista alojado, por dia*, pode ser descrito através de uma variável aleatória [$X$] com distribuição Normal, de média 0,50 m3 e desvio padrão 0,05 m3.
 
-A função de distribuição de probabilidade de uma variável aleatória $X$ com distribuição Normal é dada por:
+A função de densidade de probabilidade de uma variável aleatória $X \sim N(\mu,\sigma^2)$ com distribuição Normal é dada por:
 
 ```{=latex}
 \begin{align}
-F(x | \mu, \sigma) &= \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)
+f(x | \mu, \sigma^2) &= \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right)
 \end{align}
 ```
-Logo, a função de distribuição de probabilidade de $X$ é dada por:
+Logo, a função de distribuição [comulativa] de probabilidade de $X \sim N(0.5,0.05)$ é dada por:
 ```{=latex}
 \begin{align}
-F(x | \mu = 0.5, \sigma = 0.05) &= \frac{1}{0.05\sqrt{2 \pi}} \exp \left( - \frac{(x - 0.5)^2}{2 (0.05)^2} \right) \\
-F(x | \mu = 0.5, \sigma = 0.05) &= 20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \exp \left( - \frac{(x - 0.5)^2}{0.005} \right)
+F(x) = P\{ X \le x\}
+    &= \int_{-\infty}^x f(t | \mu = 0.5, \sigma^2 = 0.05)\,dt
+    \\&=
+        \frac{1}{0.05\sqrt{2 \pi}}
+        \int_{-\infty}^x \exp \left( - \frac{(t - 0.5)^2}{2 (0.05)^2} \right)\,dt
+    \\&=
+        20(2 \pi)^{ \unaryminus \sfrac{1}{2}}
+        \int_{-\infty}^x \exp \left( - \frac{(t - 0.5)^2}{0.005} \right)\,dt \label{eq:fdp}
 \end{align}
 ```
+, sendo $x$ o consumo de água por turista alojado, por dia.
 
 # a)
-> Qual a probabilidade do acréscimo no consumo, por turista e por dia, ser inferior a 0,437 m3?
 
-A probabilidade de $P(a < X < b)$ é dada por:
+> Qual a probabilidade do consumo, por turista e por dia, ser inferior a 0,437 m3?
+
+Como a função é contínua,
 ```{=latex}
 \begin{align}
-P\{a < X \le b\} &= F(b) - F(a) \\
-               &= \int_a^b f(t)\,dt \label{eq:probabilidade_intervalo}
+P\{X < x\} &= P\{X \le x\} = F(x).
 \end{align}
 ```
-, logo, a probabilidade de $X$ ser inferior a 0,437 m3 é dada por:
+Conforme a equação \eqref{eq:fdp}:
+
 ```{=latex}
 \begin{align}
-    P\{X < 0,437\} &= 20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \int_{-\infty}^{0.437} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt
+    P\{X < 0.437\} &= 20(2 \pi)^{ \unaryminus \sfrac{1}{2}} \int_{-\infty}^{0.437} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt \label{eq:probabilidade_intervalo}
 \end{align}
 ```
 
@@ -66,7 +74,7 @@ print(pnorm(0.437, mean = 0.5, sd = 0.05, lower.tail = TRUE))
 ```
 
 # b)
-> Calcule o maior acréscimo de consumo dos 25% menores acréscimos.
+> Calcule o maior consumo dos 25% menores.
 
 Conforme a Eq. \ref{eq:probabilidade_intervalo},
 ```{=latex}
@@ -82,3 +90,34 @@ rightVal <- 0.0125 * (2 * pi)^(1/2)
 print(pracma::bisect(function(x) integrate(intF, lower = -Inf, upper = x)$value - rightVal, 0, 1)$root)
 print(qnorm(0.25, mean = 0.5, sd = 0.05, lower.tail = TRUE))
 ```
+
+# c)
+> Numa certa unidade de turismo rural casa, a capacidade é de 20 hóspedes. Considerando um momento em que a unidade está totalmente cheia, qual a probabilidade do consumo de água diário aumentar em pelo menos 10,75 m3 (quando comparado com a situação em que não existem hóspedes)?
+
+Sendo $Y = 20X$ e $G$ a função de distribuição de probabilidade de $Y$, temos que:
+```{=latex}
+\begin{align}
+G(x) &= P\{Y \le x\} \\
+     &= P\{20X \le x\} \\
+     &= P\{X \le \frac{x}{20}\} \\
+     &= F\left(\frac{x}{20}\right)
+\end{align}
+```
+
+Conforme a Eq. \ref{eq:probabilidade_intervalo},
+
+```{=latex}
+\begin{align}
+P\{X > \frac{10.75}{20}\} &= 1 - P\{X \le 0.5375\} \\
+                &= 1 - \left( 20(2 \pi)^{ \unaryminus \sfrac{1}{2}}\int_{-\infty}^{0.5375} \exp \left( - \frac{(t - 0.5)^2}{0.005} \right) \,dt \right)
+\end{align}
+```
+
+```{r}
+print(1 - 20 * (2 * pi)^(-1/2) * integrate(intF, lower = -Inf, upper = 10.75/20)$value)
+print(1 - pnorm(10.75/20, mean = 0.5, sd = 0.05, lower.tail = TRUE))
+```
+
+# d)
+
+>
