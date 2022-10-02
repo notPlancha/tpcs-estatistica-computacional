@@ -20,6 +20,10 @@ output:
         number_sections: false
 ---
 
+```{r results = FALSE, message=FALSE}
+#libraries
+library(tibble)
+```
 
 > Sabe-se que nos municípios de uma certa região turística, 40% [destes municípios] mais que duplicam a população nos meses de verão.
 >
@@ -106,7 +110,9 @@ Como $a_i = 1 \land \mu_i = \mu = 0.5 \land \sigma_n^2 = \sigma^2 = 0.05^2$,
 
 ```{=latex}
 \begin{align}
-T = 20X &\sim N(20 \mu, \sqrt{20 \sigma^2})
+T = 20X &\sim N(20 \mu, \sqrt{20 \sigma^2}) \\
+        &\sim N(20 \cdot 0.5, \sqrt{20 \cdot 0.05^2}) \\
+        &\sim N(10, 0.05)
 \end{align}
 ```
 
@@ -114,20 +120,55 @@ Conforme a Eq. \ref{eq:fdn},
 ```{=latex}
 \begin{align}
 P\{T > 10.75\} &= 1 - P\{T \le 10.75\} \\
-               &= 1 - \int_{-\infty}^{10.75} f(t | \mu = 20 \cdot 0.5, \sigma^2 = \sqrt{20} \cdot 0.05)\,dt \\
-               &= 1 - \int_{-\infty}^{10.75} f(t | \mu = 10, \sigma^2 = 0.1 \sqrt{5})\,dt \\
-               &= 1 - \frac{1}{\sqrt{2 \pi (0.1 \sqrt{5})}} \int_{-\infty}^{10.75} \exp \left( - \frac{(t - 10)^2}{2 \cdot 0.1 \sqrt{5}} \right)\,dt
+               &= 1 - \int_{-\infty}^{10.75} f(t | \mu = 20 \cdot 0.5, \sigma = \sqrt{0.05}) \,dt \\
+               &= 1 - \frac{1}{\sqrt{0.05} \sqrt{2 \pi}} \int_{-\infty}^{10.75} \exp \left( - \frac{(t - 10)^2}{2 \cdot \left( \sqrt(0.05) \right)^2} \right)\,dt \\
+               &= 1 - (0.1 \pi)^{ \unaryminus \sfrac{1}{2}} \int_{-\infty}^{10.75} \exp \left( - \frac{(t - 10)^2}{0.1}\right)\,dt
 \end{align}
 ```
 
 ```{r}
-intT <- function(x) {
-    exp(-((x - 10)^2) / (2 * 0.1 * sqrt(5)))
+intF <- function(x) {
+    exp(-((x - 10)^2) / 0.1)
 }
-print(1 - (1/sqrt(2*pi * 0.1 * sqrt(5))) * integrate(intT, lower = -Inf, upper = 10.75)$value)
+print(1 - (0.1 * pi)^(-1/2) * integrate(intF, lower = -Inf, upper = 10.75)$value)
 print(1 - pnorm(10.75, mean = 20*0.5, sd = sqrt(20)*0.05, lower.tail = TRUE))
 ```
 
 # d)
 
->
+> Em relação à casa de turismo rural da alínea anterior:
+
+## i
+> Simule *uma* observação do acréscimo de consumo de água gerado pelos 20 hóspedes dessa casa de turismo rural.
+
+```{r}
+S <- rnorm(20, mean = 0.5, sd = 0.05)
+tibble(sum(S), mean(S), min(S), max(S))
+```
+O consumo simulado pelos 20 hóspedes variam entre $\qty{`r round(min(S),3)`}{\cubic\meter}$ e $\qty{`r round(max(S), 3)`}{\cubic\meter}$, e os 20 hóspedes coletivamente consumiram $\qty{`r round(sum(S), 3)`}{\cubic\meter}$.
+
+## ii
+> Simule 1000 observações nas mesmas condições, guardando *apenas* a soma para cada uma delas
+
+```{r}
+times <- 1000
+S <- colSums(matrix(rnorm(20*times, mean = 0.5, sd = 0.05), ncol = times))
+tibble(S)
+```
+
+> [...] com base nessa simulação, estime a probabilidade que calculou de forma exata em c).
+
+```{r}
+print(sum(S > 10.75) / times)
+print(1 - pnorm(10.75, mean = 20*0.5, sd = sqrt(20)*0.05, lower.tail = TRUE))
+```
+
+Sendo que a probabilidade exata para o consumo é tão pequena, a simulação não é muito precisa com $\num{1000}$ observações. Para demonstrar uma simulação mais precisa, vamos aumentar o número de observações para $\num{1000000}$.
+
+```{r}
+times <- 1000000
+S <- colSums(matrix(rnorm(20*times, mean = 0.5, sd = 0.05), ncol = times))
+print(sum(S > 10.75) / times)
+print(1 - pnorm(10.75, mean = 20*0.5, sd = sqrt(20)*0.05, lower.tail = TRUE))
+```
+Agora torna-se mais evidente certidão da probabilidade exata.
