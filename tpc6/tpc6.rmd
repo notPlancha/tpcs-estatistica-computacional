@@ -9,6 +9,7 @@ header-includes:
  - \usepackage{amsmath}
  - \usepackage{siunitx}
  - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
+ - \usepackage{interval}
  # - \usepackage[cp1251]{inputenc}
 listings-disable-line-numbers: true
 listings-no-page-break: true
@@ -40,7 +41,7 @@ Como a variável aleatória $X \sim \operatorname {B}(1, p)$, temos que:
 Logo a minha função de probabilidade conjunta de $(X_1, \dots, X_n)$ é dada por:
 ```{=latex}
 \begin{align}
- P \{X_{1}=x_{1},X_{2}&=x_{2},\cdots ,X_{n}=x_{n} \} &= f(k; n, p) = \binom{n}{k}p^{k}q^{n-k}
+ &P \{X_{1}=x_{1},X_{2}&=x_{2},\cdots ,X_{n}=x_{n} \} = f(k; n, p) = \binom{n}{k}p^{k}q^{n-k}
 \end{align}
 ```
 , sendo
@@ -49,10 +50,10 @@ Logo a minha função de probabilidade conjunta de $(X_1, \dots, X_n)$ é dada p
 - $x_{1},x_{2},\cdots ,x_{n}\in \{0,1\}$,
 - $k=\sum x_{n}$.
 
-Logo, se $n = 10$, a nossa função de probabilidade conjunta $\mathbf {g} :\{0,1\}^10\longrightarrow [0,1]$ é dada por:
+Logo, se $n = 10$, a nossa função de probabilidade conjunta $\mathbf {g} :\{0,1\}^{10}\longrightarrow \interval[] {0}{1}$ é dada por:
 ```{=latex}
 \begin{align}
- g(\boldsymbol {x}; p)&=\binom{10}{\sum^{10}_{i=1}x_{i}}p^{\sum^{10}_{i=1}x_{i}}(1-p)^{10-\sum^{10}_{i=1}x_{i}}
+ &g\left(\boldsymbol {x}; k = \sum^{10}_{i=1}x_{i},p\right)=\binom{10}{k}p^{k}(1-p)^{10-k} \label{eq:probabilidade_conjunta}
 \end{align}
 ```
 TODO b
