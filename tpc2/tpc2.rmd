@@ -99,8 +99,8 @@ MASS::as.fractions(nrow(Peixes[Peixes$PesInf == TRUE & Peixes$tipo == "dourado",
 > Qual a probabilidade de um *cutefish* capturado ser dourado e ter peso nos parâmetros desejados para a pesca desportiva?
 ```{=latex}
 \begin{align}
-    P(D \cap W) &= P(D)P(W \mid D)
-    P(D \cap W) &= 0.3 \cdot 0.5
+    P(D \cap W) &= P(D)P(W \mid D) \\
+    P(D \cap W) &= 0.3 \cdot 0.5 \\
     P(D \cap W) &= 0.15 = 15\%
 \end{align}
 ```

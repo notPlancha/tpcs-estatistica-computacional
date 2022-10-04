@@ -1,0 +1,58 @@
+---
+title: TPC6 – turma 2 - Resolução
+author: André Plancha - CDB2 - 105289
+date: 05/10/2022
+subject: TPC6 - turma 2
+header-includes:
+ - \usepackage{xfrac}
+ - \usepackage{comment}
+ - \usepackage{amsmath}
+ - \usepackage{siunitx}
+ - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
+ # - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+ pdf_document:
+  toc: false
+  number_sections: false
+---
+
+TODO enunciado
+x
+A função massa de probabilidade de uma distribuição de Bernoulli é dada por:
+```{=latex}
+\begin{align}
+  f(x;p) &= \begin{cases}
+    p & \text{se } x=1 \\
+    1-p & \text{se } x=0
+  \end{cases}
+\end{align}
+```
+Como a variável aleatória $X \sim \operatorname {B}(1, p)$, temos que:
+```{=latex}
+\begin{align}
+ \sum _{k=1}^{n}X_{k}&\sim \operatorname {B} (n,p)
+\end{align}
+```
+, sendo que $X_{1},\dots ,X_{n}$ são variáveis independentes e identicamente distribuídas num processo de Bernoulli.
+
+Logo a minha função de probabilidade conjunta de $(X_1, \dots, X_n)$ é dada por:
+```{=latex}
+\begin{align}
+ P \{X_{1}=x_{1},X_{2}&=x_{2},\cdots ,X_{n}=x_{n} \} &= f(k; n, p) = \binom{n}{k}p^{k}q^{n-k}
+\end{align}
+```
+, sendo
+- $p$ a probabilidade de sucesso (neste caso a probabilidade de uma foto ter gatinhos),
+- $q = 1 - p$,
+- $x_{1},x_{2},\cdots ,x_{n}\in \{0,1\}$,
+- $k=\sum x_{n}$.
+
+Logo, se $n = 10$, a nossa função de probabilidade conjunta $\mathbf {g} :\{0,1\}^10\longrightarrow [0,1]$ é dada por:
+```{=latex}
+\begin{align}
+ g(\boldsymbol {x}; p)&=\binom{10}{\sum^{10}_{i=1}x_{i}}p^{\sum^{10}_{i=1}x_{i}}(1-p)^{10-\sum^{10}_{i=1}x_{i}}
+\end{align}
+```
+TODO b
