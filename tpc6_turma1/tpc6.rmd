@@ -1,0 +1,106 @@
+---
+title: TPC6 – turma 2 - Resolução
+author: André Plancha - CDB2 - 105289
+date: versão 1.0 - 05/10/2022
+subject: TPC6 - turma 2
+header-includes:
+ - \usepackage{xfrac}
+ - \usepackage{comment}
+ - \usepackage{amsmath}
+ - \usepackage{siunitx}
+ - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
+ - \usepackage{interval}
+ # - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+ pdf_document:
+  toc: false
+  number_sections: false
+---
+# a)
+TODO enunciado
+
+a função massa de probabilidade de uma distribuição de Bernoulli é dada por:
+```{=latex}
+\begin{align}
+  f(x;p) &= \begin{cases}
+    p & \text{se } x=1 \\
+    1-p & \text{se } x=0
+  \end{cases}
+\end{align}
+```
+Como a variável aleatória $X \sim \operatorname {B}(1, p)$, temos que:
+```{=latex}
+\begin{align}
+ \sum _{k=1}^{n}X_{k}&\sim \operatorname {B} (n,p)
+\end{align}
+```
+, sendo que $X_{1},\dots ,X_{n}$ são variáveis independentes e identicamente distribuídas num *processo de Bernoulli*.
+
+Logo a minha função de probabilidade conjunta de $(X_1, \dots, X_n)$ é dada por:
+```{=latex}
+\begin{align}
+ &P \{X_{1}=x_{1},X_{2}=x_{2},\cdots ,X_{n}=x_{n} \} = f(k; n, p) = \binom{n}{k}p^{k}q^{n-k}
+\end{align}
+```
+, sendo
+
+- $p$ a probabilidade de sucesso (neste caso a probabilidade de uma foto ter gatinhos),
+- $q = 1 - p$,
+- $x_{1},x_{2},\cdots ,x_{n}\in \{0,1\}$,
+- $k=\sum x_{n}$.
+
+Logo, se $n = 10$, a nossa função de probabilidade conjunta $\mathbf {g} :\{0,1\}^{10}\longrightarrow \interval[] {0}{1}$ é dada por:
+```{=latex}
+\begin{align}
+ &g\left(\boldsymbol {x}; p\right)=\binom{10}{k}p^{k}(1-p)^{10-k} \label{eq:probabilidade_conjunta}\, | \,k = \sum^{10}_{i=1}x_{i},
+\end{align}
+```
+# b)
+TODO enunciado
+
+Conforme a Eq. \ref{eq:probabilidade_conjunta}, a probabilidade de observar a amostra $(1,0,1,0,0,0,0,0,0,0)$, se $p = 0.1$, é dada por:
+```{=latex}
+\begin{align}
+g\left(1,0,1,0,0,0,0,0,0,0; p = 0.1\right) = \binom{10}{2}0.1^{2}(1-0.1)^{10-2} = `r round(choose(10, 2) * 0.1^2 * (1-0.1)^8, 3)`
+\end{align}
+```
+. Da mesma forma, a probabilidade de observar a amostra $(1,0,1,0,0,0,0,0,0,0)$, se $p = 0.2$, é dada por:
+```{=latex}
+\begin{align}
+g\left(1,0,1,0,0,0,0,0,0,0; p = 0.2\right) = \binom{10}{2}0.2^{2}(1-0.2)^{10-2} = `r round(choose(10, 2) * 0.2^2 * (1-0.2)^8, 3)`
+\end{align}
+```
+# c)
+TODO enunciado
+
+
+$T_1 = \sum_{i=1}^{10} X_i$ representa o número de gatinhos numa amostra de 10 fotos $X_1, \dots, X_{10}$, sendo que $X_i \sim \operatorname{B}(1, p)$. Logo, $T_1$ é uma variável aleatória com distribuição binomial, com $n = 10$ e parâmetro de probabilidade de sucesso $p$.
+
+O valor esperado em uma tentativa de Bernoulli é dado por:
+```{=latex}
+\begin{align}
+  E[X] &= p
+\end{align}
+```
+, sendo $p$ a probabilidade de sucesso. Logo, o valor esperado de $T_1$ é dado por:
+```{=latex}
+\begin{align}
+  E[T_1] &= E\left[\sum_{i=1}^{10} X_i\right] = 10p
+\end{align}
+```
+. Isto é de esperar porque o processo de Bernoulli é uma distribuição binomial, logo $T_1 \sim \operatorname{B}(10, p)$.
+
+# d)
+TODO enunciado
+
+
+$T_2 = \frac{\sum_{i=1}^{10} X_i}{10}$ representa a proporção de gatinhos numa amostra de 10 fotos $X_1, \dots, X_{10}$, sendo que $X_i \sim \operatorname{B}(1, p)$. Ou seja, $T_2$ indica a probabilidade de, ao escolher uma foto ao acaso de tal amostra, essa foto ter um gatinho ira ter probabilidade $T_2$. Com uma amostra suficientemente grande, esta probabilidade aproxima-se da probabilidade de sucesso $p$.
+
+O valor esperado de $T_2$ é dado por:
+```{=latex}
+\begin{align}
+  E[T_2] &= E\left[\frac{\sum_{i=1}^{10} X_i}{10}\right] = \frac{10p}{10} = p
+\end{align}
+```

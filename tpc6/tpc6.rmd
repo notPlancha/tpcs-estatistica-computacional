@@ -10,97 +10,61 @@ header-includes:
  - \usepackage{siunitx}
  - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
  - \usepackage{interval}
- # - \usepackage[cp1251]{inputenc}
+ - \newcommand{\indep}{\perp \!\!\! \perp}
+# - \usepackage[cp1251]{inputenc}
 listings-disable-line-numbers: true
 listings-no-page-break: true
 output:
- pdf_document:
-  toc: false
-  number_sections: false
+pdf_document:
+toc: false
+number_sections: false
 ---
-# a)
-TODO enunciado
 
-a função massa de probabilidade de uma distribuição de Bernoulli é dada por:
+> Suponha a experiência aleatória que consiste em fazer scroll, sem qualquer regra, num
+banco de fotos genéricas e contar quantas fotos de gatinhos vê em 5 minutos. Ou seja,
+considere a seguinte variável aleatória X – número de fotos de gatinhos visionadas em 5
+minutos. Assuma que está em condições de considerar X como tendo distribuição de Poisson
+de parâmetro $\lambda$
+
+A função de probabilidade de X é dada por:
 ```{=latex}
 \begin{align}
-  f(x;p) &= \begin{cases}
-    p & \text{se } x=1 \\
-    1-p & \text{se } x=0
-  \end{cases}
+f(k; \lambda) = P\{X = k \}= \frac{\lambda^k e^{-\lambda}}{k!}
 \end{align}
 ```
-Como a variável aleatória $X \sim \operatorname {B}(1, p)$, temos que:
+, sendo $\lambda$ o número de fotos de gatinhos por \qty{5}{\minute}.
+
+# a
+
+>  Construa a função de probabilidade conjunta de $(X_1, X_2, \dots , X_10)$.
+
+Segundo a *regra da cadeia de probabilidade*, função de distribuição de probabilidade conjunta de 2 variáveis aleatórias $X_1, X_2$ é dada por:
 ```{=latex}
 \begin{align}
- \sum _{k=1}^{n}X_{k}&\sim \operatorname {B} (n,p)
+p_{X,Y}(x,y) &=\mathrm {P} \{X=x, Y=y\} \\
+             &=\mathrm {P} \{Y=y\mid X=x\}\cdot \mathrm {P} \{X=x\}=\mathrm {P} \{X=x\mid Y=y\}\cdot \mathrm {P} \{Y=y\}
 \end{align}
 ```
-, sendo que $X_{1},\dots ,X_{n}$ são variáveis independentes e identicamente distribuídas num *processo de Bernoulli*.
-
-Logo a minha função de probabilidade conjunta de $(X_1, \dots, X_n)$ é dada por:
+. Esta regra é válida para qualquer número de variáveis aleatórias; ou seja:
 ```{=latex}
 \begin{align}
- &P \{X_{1}=x_{1},X_{2}=x_{2},\cdots ,X_{n}=x_{n} \} = f(k; n, p) = \binom{n}{k}p^{k}q^{n-k}
+p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1, X_2=x_2, \dots, X_n=x_n\}
 \end{align}
 ```
-, sendo
-
-- $p$ a probabilidade de sucesso (neste caso a probabilidade de uma foto ter gatinhos),
-- $q = 1 - p$,
-- $x_{1},x_{2},\cdots ,x_{n}\in \{0,1\}$,
-- $k=\sum x_{n}$.
-
-Logo, se $n = 10$, a nossa função de probabilidade conjunta $\mathbf {g} :\{0,1\}^{10}\longrightarrow \interval[] {0}{1}$ é dada por:
+Como a amostra é composta por variáveis aleatórias independentes e $\forall (X, Y) \in \mathbb{R}^2 \colon X \indep Y \Rightarrow P\{X \mid Y\} = P\{X\}$, a função de distribuição de probabilidade conjunta é dada por:
 ```{=latex}
 \begin{align}
- &g\left(\boldsymbol {x}; p\right)=\binom{10}{k}p^{k}(1-p)^{10-k} \label{eq:probabilidade_conjunta}\, | \,k = \sum^{10}_{i=1}x_{i},
+p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1\}\times \mathrm {P} \{X_2=x_2\}\times \dots \times \mathrm {P} \{X_n=x_n\} \\
+&= \prod_{i=1}^{n} \mathrm {P} \{X_i=x_i\}
 \end{align}
 ```
-# b)
-TODO enunciado
-
-Conforme a Eq. \ref{eq:probabilidade_conjunta}, a probabilidade de observar a amostra $(1,0,1,0,0,0,0,0,0,0)$, se $p = 0.1$, é dada por:
+. Logo, a função de probabilidade conjunta de $\boldsymbol{X} = (X_1, X_2, \dots , X_10)$ é dada por:
 ```{=latex}
 \begin{align}
-g\left(1,0,1,0,0,0,0,0,0,0; p = 0.1\right) = \binom{10}{2}0.1^{2}(1-0.1)^{10-2} = `r round(choose(10, 2) * 0.1^2 * (1-0.1)^8, 3)`
+p_{\boldsymbol{X}}(\boldsymbol{x})
+&= \prod_{i=1}^{10} \mathrm {P} \{X_i=x_i\} \\
+&= \prod_{i=1}^{10} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}
 \end{align}
 ```
-. Da mesma forma, a probabilidade de observar a amostra $(1,0,1,0,0,0,0,0,0,0)$, se $p = 0.2$, é dada por:
-```{=latex}
-\begin{align}
-g\left(1,0,1,0,0,0,0,0,0,0; p = 0.2\right) = \binom{10}{2}0.2^{2}(1-0.2)^{10-2} = `r round(choose(10, 2) * 0.2^2 * (1-0.2)^8, 3)`
-\end{align}
-```
-# c)
-TODO enunciado
 
 
-$T_1 = \sum_{i=1}^{10} X_i$ representa o número de gatinhos numa amostra de 10 fotos $X_1, \dots, X_{10}$, sendo que $X_i \sim \operatorname{B}(1, p)$. Logo, $T_1$ é uma variável aleatória com distribuição binomial, com $n = 10$ e parâmetro de probabilidade de sucesso $p$.
-
-O valor esperado em uma tentativa de Bernoulli é dado por:
-```{=latex}
-\begin{align}
-  E[X] &= p
-\end{align}
-```
-, sendo $p$ a probabilidade de sucesso. Logo, o valor esperado de $T_1$ é dado por:
-```{=latex}
-\begin{align}
-  E[T_1] &= E\left[\sum_{i=1}^{10} X_i\right] = 10p
-\end{align}
-```
-. Isto é de esperar porque o processo de Bernoulli é uma distribuição binomial, logo $T_1 \sim \operatorname{B}(10, p)$.
-
-# d)
-TODO enunciado
-
-
-$T_2 = \frac{\sum_{i=1}^{10} X_i}{10}$ representa a proporção de gatinhos numa amostra de 10 fotos $X_1, \dots, X_{10}$, sendo que $X_i \sim \operatorname{B}(1, p)$. Ou seja, $T_2$ indica a probabilidade de, ao escolher uma foto ao acaso de tal amostra, essa foto ter um gatinho ira ter probabilidade $T_2$. Com uma amostra suficientemente grande, esta probabilidade aproxima-se da probabilidade de sucesso $p$.
-
-O valor esperado de $T_2$ é dado por:
-```{=latex}
-\begin{align}
-  E[T_2] &= E\left[\frac{\sum_{i=1}^{10} X_i}{10}\right] = \frac{10p}{10} = p
-\end{align}
-```
