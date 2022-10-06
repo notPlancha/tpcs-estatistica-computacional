@@ -1,7 +1,7 @@
 ---
 title: TPC6 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: versão 1.0 - 06/10/2022
+date: versão 1.1 - 06/10/2022
 subject: TPC6 - turma 2
 header-includes:
  - \usepackage{xfrac}
@@ -112,7 +112,7 @@ A estatística $T_1 = \sum^{10}_{i=1} X_i$ é a soma das 10 variáveis aleatóri
 
 > Qual a sua distribuição?
 
-Como as distribuições de Poisson são aditivas, e $X_i \cap p(\lambda)$, a distribuição de $T_1$ é dada por:
+Como a adição de variáveis aleatórias com distribuições de Poisson tem uma distribuição de Poisson também, e $X_i \cap p(\lambda)$, a distribuição de $T_1$ é dada por:
 ```{=latex}
 \begin{align}
 T_1 = \sum^{10}_{i=1} X_i &\cap p(\lambda = \sum^{10}_{i=1} \lambda) \\
