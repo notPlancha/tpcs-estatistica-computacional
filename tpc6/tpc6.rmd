@@ -34,21 +34,21 @@ f(k; \lambda) = P\{X = k \}= \frac{\lambda^k e^{-\lambda}}{k!}
 ```
 , sendo $\lambda$ o número de fotos de gatinhos por \qty{5}{\minute}.
 
-# a
+# a)
 
 >  Construa a função de probabilidade conjunta de $(X_1, X_2, \dots , X_10)$.
 
 Segundo a *regra da cadeia de probabilidade*, função de distribuição de probabilidade conjunta de 2 variáveis aleatórias $X_1, X_2$ é dada por:
 ```{=latex}
 \begin{align}
-p_{X,Y}(x,y) &=\mathrm {P} \{X=x, Y=y\} \\
+p_{X,Y}(x,y) &=\mathrm {P} \{X=x \cap Y=y\} \\
              &=\mathrm {P} \{Y=y\mid X=x\}\cdot \mathrm {P} \{X=x\}=\mathrm {P} \{X=x\mid Y=y\}\cdot \mathrm {P} \{Y=y\}
 \end{align}
 ```
 . Esta regra é válida para qualquer número de variáveis aleatórias; ou seja:
 ```{=latex}
 \begin{align}
-p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1, X_2=x_2, \dots, X_n=x_n\}
+p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1 \cap X_2=x_2 \cap \dots \cap X_n=x_n\}
 \end{align}
 ```
 Como a amostra é composta por variáveis aleatórias independentes e $\forall (X, Y) \in \mathbb{R}^2 \colon X \indep Y \Rightarrow P\{X \mid Y\} = P\{X\}$, a função de distribuição de probabilidade conjunta é dada por:
@@ -58,7 +58,7 @@ p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1\}\times \
 &= \prod_{i=1}^{n} \mathrm {P} \{X_i=x_i\}
 \end{align}
 ```
-. Logo, a função de probabilidade conjunta de $\boldsymbol{X} = (X_1, X_2, \dots , X_10)$ é dada por:
+. Logo, a função de probabilidade conjunta de $\boldsymbol{X} = (X_1, X_2, \dots , X_{10})$ é dada por:
 ```{=latex}
 \begin{align}
 p_{\boldsymbol{X}}(\boldsymbol{x})
@@ -67,4 +67,6 @@ p_{\boldsymbol{X}}(\boldsymbol{x})
 \end{align}
 ```
 
+# b)
 
+> Se \lambda 
