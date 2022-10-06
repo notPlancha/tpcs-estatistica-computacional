@@ -1,7 +1,7 @@
 ---
 title: TPC6 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: versão 1.0 - 05/10/2022
+date: versão 1.0 - 06/10/2022
 subject: TPC6 - turma 2
 header-includes:
  - \usepackage{xfrac}
@@ -20,53 +20,116 @@ toc: false
 number_sections: false
 ---
 
-> Suponha a experiência aleatória que consiste em fazer scroll, sem qualquer regra, num
-banco de fotos genéricas e contar quantas fotos de gatinhos vê em 5 minutos. Ou seja,
-considere a seguinte variável aleatória X – número de fotos de gatinhos visionadas em 5
-minutos. Assuma que está em condições de considerar X como tendo distribuição de Poisson
-de parâmetro $\lambda$
+> Suponha a experiência aleatória que consiste em fazer scroll, sem qualquer regra, num banco de fotos genéricas e contar quantas fotos de gatinhos vê em 5 minutos. Ou seja, considere a seguinte variável aleatória X – número de fotos de gatinhos visionadas em 5 minutos. Assuma que está em condições de considerar X como tendo distribuição de Poisson de parâmetro $\lambda$.
 
 A função de probabilidade de X é dada por:
 ```{=latex}
 \begin{align}
-f(k; \lambda) = P\{X = k \}= \frac{\lambda^k e^{-\lambda}}{k!}
+f_X(k; \lambda) = P[X = k ]= \frac{\lambda^k e^{-\lambda}}{k!}
 \end{align}
 ```
 , sendo $\lambda$ o número de fotos de gatinhos por \qty{5}{\minute}.
 
 # a)
 
->  Construa a função de probabilidade conjunta de $(X_1, X_2, \dots , X_10)$.
+>  Construa a função de probabilidade conjunta de $(X_1, X_2, \dots , X_{10})$.
 
 Segundo a *regra da cadeia de probabilidade*, função de distribuição de probabilidade conjunta de 2 variáveis aleatórias $X_1, X_2$ é dada por:
 ```{=latex}
 \begin{align}
-p_{X,Y}(x,y) &=\mathrm {P} \{X=x \cap Y=y\} \\
-             &=\mathrm {P} \{Y=y\mid X=x\}\cdot \mathrm {P} \{X=x\}=\mathrm {P} \{X=x\mid Y=y\}\cdot \mathrm {P} \{Y=y\}
+p_{X,Y}(x,y) &=\mathrm {P} [X=x , Y=y] \\
+             &=\mathrm {P} [Y=y\mid X=x]\cdot \mathrm {P} [X=x]=\mathrm {P} [X=x\mid Y=y]\cdot \mathrm {P} [Y=y]
 \end{align}
 ```
 . Esta regra é válida para qualquer número de variáveis aleatórias; ou seja:
 ```{=latex}
 \begin{align}
-p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1 \cap X_2=x_2 \cap \dots \cap X_n=x_n\}
+p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} [X_1=x_1 , X_2=x_2 , \dots , X_n=x_n]
 \end{align}
 ```
-Como a amostra é composta por variáveis aleatórias independentes e $\forall (X, Y) \in \mathbb{R}^2 \colon X \indep Y \Rightarrow P\{X \mid Y\} = P\{X\}$, a função de distribuição de probabilidade conjunta é dada por:
+Como a amostra é composta por variáveis aleatórias independentes e $\forall (X, Y) \in \mathbb{R}^2 \colon X \indep Y \Rightarrow P[X \mid Y] = P[X]$, a função de distribuição de probabilidade conjunta é dada por:
 ```{=latex}
 \begin{align}
-p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} \{X_1=x_1\}\times \mathrm {P} \{X_2=x_2\}\times \dots \times \mathrm {P} \{X_n=x_n\} \\
-&= \prod_{i=1}^{n} \mathrm {P} \{X_i=x_i\}
+p_{X_1, X_2, \dots, X_n}(x_1, x_2, \dots, x_n) &=\mathrm {P} [X_1=x_1]\times \mathrm {P} [X_2=x_2]\times \dots \times \mathrm {P} [X_n=x_n] \\
+&= \prod_{i=1}^{n} \mathrm {P} [X_i=x_i]
 \end{align}
 ```
 . Logo, a função de probabilidade conjunta de $\boldsymbol{X} = (X_1, X_2, \dots , X_{10})$ é dada por:
 ```{=latex}
 \begin{align}
-p_{\boldsymbol{X}}(\boldsymbol{x})
-&= \prod_{i=1}^{10} \mathrm {P} \{X_i=x_i\} \\
-&= \prod_{i=1}^{10} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}
+f_{\boldsymbol{X}}(\boldsymbol{x}; \lambda)
+&= \prod_{i=1}^{10} \mathrm {P} [X_i=x_i] \\
+&= \prod_{i=1}^{10} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \\
+&= e^{\unaryminus 10\lambda}\prod_{i=1}^{10} \frac{\lambda^{x_i}}{x_i!}
 \end{align}
 ```
 
 # b)
 
-> Se \lambda 
+> Se $\lambda = 3.9$, qual a probabilidade de observar a amostra (3,0,4,5,1,2,4,7,6,1)?
+
+A probabilidade de observar a amostra $\boldsymbol{a} = (3,0,4,5,1,2,4,7,6,1)$, sendo $\lambda = 3.9$ é dada por:
+
+```{=latex}
+\begin{align}
+f_{\boldsymbol{X}}(\boldsymbol{a}; \lambda = 3.9) &= e^{\unaryminus 10 \cdot 3.9} \prod_{i=1}^{10} \frac{3.9^{a_i}}{a_i!} \\
+&= e^{\unaryminus 39} \prod_{i=1}^{10} \frac{3.9^{a_i}}{a_i!}
+\end{align}
+```
+
+```{r}
+currLambda <- 3.9
+a <- c(3,0,4,5,1,2,4,7,6,1)
+f <- function(x, lambda) {
+  exp(-10 * lambda) * prod(lambda^x / factorial(x))
+}
+print(f(a, currLambda))
+print(prod(dpois(a, lambda = currLambda)))
+```
+
+> E se $\lambda = 4.1$?
+
+A probabilidade de observar a amostra $\boldsymbol{a} = (3,0,4,5,1,2,4,7,6,1)$, sendo $\lambda = 4.1$ é dada por:
+
+```{=latex}
+\begin{align}
+f_{\boldsymbol{X}}(\boldsymbol{a}; \lambda = 4.1) &= e^{\unaryminus 10 \cdot 4.1} \prod_{i=1}^{10} \frac{4.1^{a_i}}{a_i!} \\
+&= e^{\unaryminus 41} \prod_{i=1}^{10} \frac{4.1^{a_i}}{a_i!}
+\end{align}
+```
+
+```{r}
+currLambda <- 4.1
+print(f(a, currLambda))
+print(prod(dpois(a, lambda = currLambda)))
+```
+
+# c)
+
+> Como pode interpretar (no contexto apresentado) a estatística $T_1 = \sum^{10}_{i=1} X_i$?
+
+A estatística $T_1 = \sum^{10}_{i=1} X_i$ é a soma das 10 variáveis aleatórias $X_i$. Ou seja, equivale ao número total de fotos de gatinhos tiradas em 5 minutos diferentes, ou seja, em 50 minutos.
+
+> Qual a sua distribuição?
+
+Como as distribuições de Poisson são aditivas, e $X_i \cap p(\lambda)$, a distribuição de $T_1$ é dada por:
+```{=latex}
+\begin{align}
+T_1 = \sum^{10}_{i=1} X_i &\cap p(\lambda = \sum^{10}_{i=1} \lambda) \\
+&\cap p(\lambda = 10 \lambda)
+\end{align}
+```
+
+# d)
+> Como pode interpretar (no contexto apresentado) a estatística $T_2 = \frac{\sum^{10}_{i=1}X_i}{10}$?
+
+A estatística $T_2 = \frac{\sum^{10}_{i=1}X_i}{10}$ é a média amostral das 10 variáveis aleatórias $X_i$. Ou seja, equivale ao número médio de fotos de gatinhos tiradas em 5 minutos diferentes, ou seja, em 50 minutos. Com uma amostra suficiente grande, a média amostral aproxima-se da média. Logo, o valor esperado da média amostral é igual à média da distribuição.
+
+> Qual o seu valor esperado?
+
+Como $T_1 \cap p(10\lambda)$, e $E(X) = \lambda$,
+```{=latex}
+\begin{align}
+E(T_2) &= E(T_1) = 10\lambda
+\end{align}
+```
