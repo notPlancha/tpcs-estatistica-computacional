@@ -1,0 +1,54 @@
+---
+title: TPC6 – turma 2 - Resolução
+author: André Plancha - CDB2 - 105289
+date: versão 1.0 - 12/10/2022
+subject: TPC6 - turma 2
+header-includes:
+ - \usepackage{xfrac}
+ - \usepackage{comment}
+ - \usepackage{amsmath}
+ - \usepackage{siunitx}
+ - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
+ - \usepackage{interval}
+ - \newcommand{\indep}{\perp \!\!\! \perp}
+# - \usepackage[cp1251]{inputenc}
+listings-disable-line-numbers: true
+listings-no-page-break: true
+output:
+ pdf_document:
+  toc: false
+  number_sections: false
+---
+```{r}
+#libraries
+library(here)
+library(tibble)
+```
+
+> Num inquérito sobre óculos de sol foram colocadas várias questões aos inquiridos. Para além de características sociodemográficas (sexo, idade e nível de educação), perguntou-se o tipo de óculos de sol que possuíam, quando tinham sido adquiridos, onde tinham sido adquiridos, quanto tinham custado e se eram da marca SoleMio(SM/RB).
+> Para além destas questões, ainda foram colocadas outras que originaram a construção de um conjunto de indicadores, cada um numa escala contínua de 0 a 10 – fatores que influenciam a compra de óculos de sol.
+> Para este TPC, irão apenas analisar duas questões: 1. O indicador “Importância da Publicidade e Marketing na compra de óculos de sol” — variável Pub.Mk; e, 2. a questão are_RB”, que indica se os óculos são ou não da marca SoleMio
+> Os “Fatores que influenciam a compra de óculos de sol” são variáveis que assumem valores reais no intervalo 0-10, onde 0 corresponde a “nada importante” e 10 corresponde a “extremamente importante”.
+
+```{r}
+df<- readRDS(here('tpc7', 'Estudo_Oculos_Sol.rds'))
+tibble(df)
+```
+
+# 1
+> Pretende-se estimar a importância média concedida à Publicidade e Marketing (variável Pub.Mk) enquanto fator de influência na compra de óculos de sol, através de um intervalo de confiança apropriado, a 99% de confiança.
+
+## Definir a variável em estudo
+
+PubMK
+
+## Identificar o parâmetro a estimar
+
+mu
+
+## Escolher a variável fulcral conveninte
+
+u qualquer n>30 nao pag 120
+
+## Indentificar o intervalo teorico
+

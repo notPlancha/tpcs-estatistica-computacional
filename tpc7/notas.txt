@@ -1,0 +1,20 @@
+Um estimador do parametro a é â = â (X1, X2 ... Xn)
+um estimador é uma variável aleatória
+Pretende que, para uma amostra, se aproxime ao valor real do parametro
+logo o estimador é uma função de variaveis obervadas
+qual estimador usqar? aquele que a probabilidade entre 2 pontos seja maior, para qualquer [a,b]
+quando se usa o estimador ótimo usa-se o ã
+as propriedades para um estimador ser otimo são não envesiamento, eficiência, e suficiencia, ver pag 99 se necessário
+máxima verosimilhança, pag 109, é um método pontual
+customa-se estimar o erro padrão quando se usa um método pontual
+uma outra forma de ter uma ideia no grau de precisão é construindo um intervalo de confiança
+na estimação por intervalos, construi-se um intervalo que contenha o parametro
+com um grau de confiança previamente estipulado
+o intervalo de confiança é o intervalo estimado, com tal certeza
+para fazer a,b b é -z, tal variavel, z, sendo a variavel os 99 por cento (com o nivel de 99)
+ou seja, o z vai ser o ponto à direita desse 99% e a cauda da esquerda, ou seja para este caso, 0.995
+faz-se com o qnorm, porque isso da me o x onde estao [0, 0.995] dos dados
+qnorm da me isso q escrevi em cima,
+dnorm dá me funcao de densidade (nao acomulada)
+pnorm dá me a funcao de distribuicao (acumulada)
+rnorm dá me um aleatorio com distribuicao normal
