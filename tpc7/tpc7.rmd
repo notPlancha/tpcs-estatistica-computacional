@@ -48,7 +48,22 @@ mu
 
 ## Escolher a variável fulcral conveninte
 
-u qualquer n>30 nao pag 120
+μ qualquer n>30 nao pag 120
 
-## Indentificar o intervalo teorico
+## Indentificar o intervalo teórico
 
+P[-z < valFul < z], sendo z = ϕ^{-1}(1-α/2) e calcular ϕ^{-1}(x)
+-> ]I_0.95[_ μ = aos limites
+
+## Calcular os valores amostrais necessários
+são o s (desvio padrao amostral)(https://wikiciencias.casadasciencias.org/wiki/index.php/Desvio_padr%C3%A3o_amostral...) e a media amostral (esta sabes) e o n é a dimensão de amostra
+
+## Construir o intervalo concreto
+substituir e resolver
+
+## Interpretar o intervalo
+
+logo se ve
+
+# 2
+n sei :shrug:

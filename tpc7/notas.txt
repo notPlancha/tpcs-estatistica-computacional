@@ -18,3 +18,10 @@ qnorm da me isso q escrevi em cima,
 dnorm dá me funcao de densidade (nao acomulada)
 pnorm dá me a funcao de distribuicao (acumulada)
 rnorm dá me um aleatorio com distribuicao normal
+qnorm é a função quantil, que é o inverso da função de distribuição acumulada, sneod \phi^{-1}(x)
+dá me o x onde P(X<=x) = alfa
+a funcao quartil leva a probabilidade e dá me o x dessa probabilidade (acomulada)
+a funcao de distribuicao acumulada é \phi(x) que me dá P(X<=x)
+o z na minha estimativa: z = ϕ^{-1}(ϕ(z)) e ϕ(z) = (1-α/2) + α = α/2 + 1, sendo α o nivel de confiança
+porque eu quero o meu ponto da esquerda, 1-α/2, mais a minha confianca (o centro), α
+a funcao de densidade não me dá a probabilidade, mas sim dá me uma forma de calcular a probabilidade de um intervalo
