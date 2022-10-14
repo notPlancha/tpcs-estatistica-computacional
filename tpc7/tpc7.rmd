@@ -11,7 +11,6 @@ header-includes:
  - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
  - \usepackage{interval}
  - \newcommand{\indep}{\perp \!\!\! \perp}
-# - \usepackage[cp1251]{inputenc}
 listings-disable-line-numbers: true
 listings-no-page-break: true
 output:
@@ -19,15 +18,20 @@ output:
   toc: false
   number_sections: false
 ---
+
 ```{r}
 #libraries
 library(here)
 library(tibble)
+library(ggplot2)
 ```
 
 > Num inquérito sobre óculos de sol foram colocadas várias questões aos inquiridos. Para além de características sociodemográficas (sexo, idade e nível de educação), perguntou-se o tipo de óculos de sol que possuíam, quando tinham sido adquiridos, onde tinham sido adquiridos, quanto tinham custado e se eram da marca SoleMio(SM/RB).
+>
 > Para além destas questões, ainda foram colocadas outras que originaram a construção de um conjunto de indicadores, cada um numa escala contínua de 0 a 10 – fatores que influenciam a compra de óculos de sol.
-> Para este TPC, irão apenas analisar duas questões: 1. O indicador “Importância da Publicidade e Marketing na compra de óculos de sol” — variável Pub.Mk; e, 2. a questão are_RB”, que indica se os óculos são ou não da marca SoleMio
+>
+> Para  este  TPC,  irão  apenas  analisar  duas  questões:  1.  O  indicador  “Importância  da Ergonomiana compra de óculos de sol” –variável Ergonomy; e, 2. a questão “are_RB”, que indica se os óculos são ou não da marca SoleMio
+>
 > Os “Fatores que influenciam a compra de óculos de sol” são variáveis que assumem valores reais no intervalo 0-10, onde 0 corresponde a “nada importante” e 10 corresponde a “extremamente importante”.
 
 ```{r}
@@ -36,27 +40,59 @@ tibble(df)
 ```
 
 # 1
-> Pretende-se estimar a importância média concedida à Publicidade e Marketing (variável Pub.Mk) enquanto fator de influência na compra de óculos de sol, através de um intervalo de confiança apropriado, a 99% de confiança.
+> Pretende-se estimar a importância média concedida à Ergonomia (variável Ergonomy) enquanto fator de influência na compra de óculos de sol, através de um intervalo de confiança apropriado, a 99% de confiança.
 
 ## Definir a variável em estudo
 
-PubMK
+A variável em estudo será a importância da ergonomia na compra de óculos de sol, a variável Ergonomy.
+
+```{r}
+erg <- df$Ergonomy
+ergPlot <- ggplot(df, aes(x = Ergonomy)) + geom_histogram(aes(y=..density..), binwidth=0.3, fill="white", color="black") + geom_density(kernel="gaussian")
+ergPlot
+```
 
 ## Identificar o parâmetro a estimar
 
-mu
+Pretende-se estimar a média $\mu$ da variável Ergonomy, ou seja, a importância média concedida à ergonomia na compra de óculos de sol, atrevés de um intervalo de confiança.
 
-## Escolher a variável fulcral conveninte
-
-μ qualquer n>30 nao pag 120
+## Escolher a variável fulcral conveninte:
+Como a média amostral $\overline{X}$ é estimador de $\mu$, a variável fulcral $Z$ será:
+```{=latex}
+\begin{align}
+ Z &= \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} \mathring{\cap} n(0,1)
+\end{align}
+```
+, sendo $s$ o desvio padrão amostral e $n$ o tamanho da amostra, para $n>30$.
 
 ## Indentificar o intervalo teórico
+```{=latex}
+\begin{align}
+&P\left[-z_{\sfrac{1-\alpha}{2}} < Z < z_{\sfrac{1-\alpha}{2}}\right] = \alpha \\
+&P\left[-z_{\sfrac{1-\alpha}{2}} < \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} < z_{\sfrac{1-\alpha}{2}}\right] = \alpha \\
+&P\left[\overline{X} - z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}} < \mu < \overline{X} + z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}\right] = \alpha \\
+&]I_{\alpha}[_{\mu} = \left[\overline{X} - z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}, \overline{X} + z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}\right]
+\end{align}
+```
+, sendo $z_{\sfrac{1-\alpha}{2}}$ o valor crítico da distribuição normal padrão, e $\alpha$ o nível de confiança.
 
-P[-z < valFul < z], sendo z = ϕ^{-1}(1-α/2) e calcular ϕ^{-1}(x)
--> ]I_0.95[_ μ = aos limites
+```{r}
+#valores fabricados
+x <- seq(-5, 5, 0.01)
+ggplot(data.frame(x=x),aes(x=x)) +
+    geom_line(aes(y=dnorm(x), color="black")) +
+    geom_line(aes(y=dnorm(x), color="black")) +
+    geom_segment(yend = qnorm(0.95+0.025), color = "red") +
+    geom_segment(yend = qnorm(0.025), color = "red")
+```
+```
 
 ## Calcular os valores amostrais necessários
 são o s (desvio padrao amostral)(https://wikiciencias.casadasciencias.org/wiki/index.php/Desvio_padr%C3%A3o_amostral...) e a media amostral (esta sabes) e o n é a dimensão de amostra
+
+P[-z < valFul < z], sendo z = q^{-1}(1-α/2) e calcular q^{-1}(x)
+-> ]I_0.95[_ mu = aos limites
+
 
 ## Construir o intervalo concreto
 substituir e resolver
@@ -66,4 +102,3 @@ substituir e resolver
 logo se ve
 
 # 2
-n sei :shrug:
