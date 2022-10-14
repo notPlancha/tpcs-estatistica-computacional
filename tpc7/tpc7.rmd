@@ -1,16 +1,18 @@
 ---
 title: TPC6 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: versão 1.0 - 12/10/2022
-subject: TPC6 - turma 2
+date: versão 1.0 - 14/10/2022
+subject: TPC7 - turma 2
 header-includes:
  - \usepackage{xfrac}
  - \usepackage{comment}
  - \usepackage{amsmath}
  - \usepackage{siunitx}
- - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
  - \usepackage{interval}
+ - \newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}}
  - \newcommand{\indep}{\perp \!\!\! \perp}
+ - "\\newcommand{\\aproxofdist}{\\: \\mathring{\\cap} \\: }"
+ - "\\newcommand{\\ofdist}{\\: \\cap \\: }"
 listings-disable-line-numbers: true
 listings-no-page-break: true
 output:
@@ -24,6 +26,7 @@ output:
 library(here)
 library(tibble)
 library(ggplot2)
+library(latex2exp)
 ```
 
 > Num inquérito sobre óculos de sol foram colocadas várias questões aos inquiridos. Para além de características sociodemográficas (sexo, idade e nível de educação), perguntou-se o tipo de óculos de sol que possuíam, quando tinham sido adquiridos, onde tinham sido adquiridos, quanto tinham custado e se eram da marca SoleMio(SM/RB).
@@ -48,7 +51,7 @@ A variável em estudo será a importância da ergonomia na compra de óculos de 
 
 ```{r}
 erg <- df$Ergonomy
-ergPlot <- ggplot(df, aes(x = Ergonomy)) + geom_histogram(aes(y=..density..), binwidth=0.3, fill="white", color="black") + geom_density(kernel="gaussian")
+ergPlot <- ggplot(df, aes(x = Ergonomy)) + geom_histogram(aes(y=..density..), binwidth=0.3, fill="white", color="black") + geom_density(kernel="gaussian", bw=0.5)
 ergPlot
 ```
 
@@ -56,11 +59,11 @@ ergPlot
 
 Pretende-se estimar a média $\mu$ da variável Ergonomy, ou seja, a importância média concedida à ergonomia na compra de óculos de sol, atrevés de um intervalo de confiança.
 
-## Escolher a variável fulcral conveninte:
+## Escolher a variável fulcral conveninte
 Como a média amostral $\overline{X}$ é estimador de $\mu$, a variável fulcral $Z$ será:
 ```{=latex}
 \begin{align}
- Z &= \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} \mathring{\cap} n(0,1)
+ Z &= \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} \aproxofdist \text{n}(0,1)
 \end{align}
 ```
 , sendo $s$ o desvio padrão amostral e $n$ o tamanho da amostra, para $n>30$.
@@ -68,37 +71,145 @@ Como a média amostral $\overline{X}$ é estimador de $\mu$, a variável fulcral
 ## Indentificar o intervalo teórico
 ```{=latex}
 \begin{align}
-&P\left[-z_{\sfrac{1-\alpha}{2}} < Z < z_{\sfrac{1-\alpha}{2}}\right] = \alpha \\
-&P\left[-z_{\sfrac{1-\alpha}{2}} < \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} < z_{\sfrac{1-\alpha}{2}}\right] = \alpha \\
-&P\left[\overline{X} - z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}} < \mu < \overline{X} + z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}\right] = \alpha \\
-&]I_{\alpha}[_{\mu} = \left[\overline{X} - z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}, \overline{X} + z_{\sfrac{1-\alpha}{2}}\sfrac{s}{\sqrt{n}}\right]
+&P\left[\unaryminus z < Z < z\right] = 1 - \alpha \\
+&P\left[\unaryminus z < \frac{\overline{X} - \mu}{\sfrac{s}{\sqrt{n}}} < z\right] = 1 - \alpha \\
+&P\left[\, \overline{X} - \frac{s \cdot z}{\sqrt{n}} < \mu < \overline{X} + \frac{s \cdot z}{\sqrt{n}}\right] = 1 - \alpha \\
+&]I_{1-\alpha}[_{\mu}\, = \left] \, \overline{X} - \frac{s \cdot z}{\sqrt{n}}; \overline{X} + \frac{s \cdot z}{\sqrt{n}}\, \right[
 \end{align}
 ```
-, sendo $z_{\sfrac{1-\alpha}{2}}$ o valor crítico da distribuição normal padrão, e $\alpha$ o nível de confiança.
+, sendo $z$ o valor crítico da distribuição normal padrão, e $(1 - \alpha)$ o nível de confiança.
 
-```{r}
+```{r echo=FALSE}
 #valores fabricados
 x <- seq(-5, 5, 0.01)
-ggplot(data.frame(x=x),aes(x=x)) +
-    geom_line(aes(y=dnorm(x), color="black")) +
-    geom_line(aes(y=dnorm(x), color="black")) +
-    geom_segment(yend = qnorm(0.95+0.025), color = "red") +
-    geom_segment(yend = qnorm(0.025), color = "red")
+ggplot(data.frame(x=x),aes(x=x, y=dnorm(x))) +
+        geom_line(aes(y=dnorm(x)), color="black") +
+        geom_area(mapping = aes(x=ifelse(x>-1.96 & x < 1.96, x, 0),y=dnorm(x), fill="black"), alpha=0.2) +
+        geom_segment(aes(x=-1.96, xend=-1.96, y=0, yend=dnorm(-1.96)), color="red") +
+        geom_segment(aes(x=1.96, xend=1.96, y=0, yend=dnorm(1.96)), color="red") +
+        geom_text(aes(x=-1.96, y=-0.01, label="-z", size=6), color="black") +
+        geom_text(aes(x=1.96, y=-0.01, label="z", size=6),color="black",) +
+        geom_text(aes(x=0, y=0.15, label="1-alpha", size=6), parse = TRUE, color="black",) +
+        theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), legend.position = "none") +
+        ylim(-0.05, 0.4)
 ```
-```
+
 
 ## Calcular os valores amostrais necessários
-são o s (desvio padrao amostral)(https://wikiciencias.casadasciencias.org/wiki/index.php/Desvio_padr%C3%A3o_amostral...) e a media amostral (esta sabes) e o n é a dimensão de amostra
 
-P[-z < valFul < z], sendo z = q^{-1}(1-α/2) e calcular q^{-1}(x)
--> ]I_0.95[_ mu = aos limites
+```{=latex}
+\begin{align}
+\overline{X} &= \frac{\sum\limits_{i=1}^{n}X_i}{n}\\
+s &= \sqrt{\frac{\sum\limits_{i=1}^{n}\left(X_i - \overline{X}\right)^2}{n-1}}\\
+z &= \phi^{-1}(\phi(z)) \\
+  &= \phi^{-1}((1-\alpha) + \sfrac{x}{2}) \\
+  &= \phi^{-1}(0.995) \label{eq:z}
+\end{align}
+```
+
+```{r}
+mu <- mean(erg)
+s <- sd(erg)
+n <- length(erg)
+z <- qnorm(0.995)
+tibble(mu, s, n, z)
+```
 
 
 ## Construir o intervalo concreto
-substituir e resolver
+
+```{=latex}
+\begin{align}
+]I_{0.995}[_{\mu}\, &= \left] \, \overline{X} - \frac{s \cdot z}{\sqrt{n}}; \overline{X} + \frac{s \cdot z}{\sqrt{n}}\, \right[ \\
+&= \left] \, `r round(mu, 2)` - \frac{`r round(s, 2)` \cdot `r round(z, 2)`}{\sqrt{`r n`}}; `r round(mu, 2)` + \frac{`r round(s, 2)` \cdot `r round(z, 2)`}{\sqrt{`r n`}}\, \right[
+\end{align}
+```
+
+```{r}
+limits <- c(mu - (s*z/sqrt(n)), mu + (s*z/sqrt(n)))
+limits
+```
 
 ## Interpretar o intervalo
 
-logo se ve
+```{r}
+ergPlot + geom_vline(xintercept = limits, color = "red", linetype = "dashed")
+```
+Eu confio com 99% de certeza que a média da importância da ergonomia na compra de óculos de sol está entre `r round(limits[1], 2)` e `r round(limits[2], 2)` valores de importância.
 
 # 2
+> Repetir os passos 1 a 7 acima descritos para estimar a proporção de pessoas que possuem óculos da marca Solemio (variável are_RB)
+
+## Definir a variável em estudo
+
+A variável em estudo serão as pessoas que possuem óculos da marca Solemio.
+
+```{r}
+poss <- sum(df$are_RB == "Yes")
+n <- nrow(df)
+ggplot(data.frame(x=c(0,1), y=c(poss, n-poss)), aes(x=x, y=y)) +
+        geom_bar(stat="identity", fill="#36454F") +
+        ylim(0, n)
+
+```
+
+## Identificar o parâmetro a estimar
+
+Pretende-se estimar o parâmetro $p$ da distribuição de Bernoulli, a proporção de pessoas que possuem óculos da marca Solemio.
+
+
+## Escolher a variável fulcral conveninte
+
+Como a média amostral $\overline{X}$ é estimador de $p$, a variável fulcral $P$ será:
+```{=latex}
+\begin{align}
+    P &= \frac{Y}{n} \aproxofdist \text{n}(p, \frac{p(1-p)}{n}) \\
+    P' &= \frac{\frac{Y}{n} - p}{\sqrt{\frac{Y \cdot (n-Y)}{n^3}}} \aproxofdist \text{n}(0,1)
+\end{align}
+```
+,sendo Y a quantidade de pessoas que possuem óculos da marca, e $n$ o tamanho da amostra, para $n>30$.
+
+## Identificar o intervalo teórico
+
+```{=latex}
+\begin{align}
+]I_{1-\alpha}[_{p}\, = \left] \frac{Y}{n} - z \cdot \sqrt{\frac{Y \cdot (n-Y)}{n^3}}; \frac{Y}{n} + z \cdot \sqrt{\frac{Y \cdot (n-Y)}{n^3}} \right[
+\end{align}
+```
+
+## Calcular os valores amostrais necessário
+
+```{=latex}
+\begin{align}
+Y &= \sum\limits_{i=1}^{n}X_i
+\end{align}
+```
+O nosso z foi demonstrado em \eqref{eq:z}.
+```{r}
+Y <- sum(df$are_RB == "Yes")
+tibble(Y, z)
+```
+
+## Construir o intervalo concreto
+
+```{=latex}
+\begin{align}
+]I_{0.995}[_{p}\, &= \left] \frac{`r Y`}{`r n`} - `r round(z, 2)` \cdot \sqrt{\frac{`r Y` \cdot (`r n`-`r Y`)}{`r n`^3}}; \frac{`r Y`}{`r n`} + `r round(z, 2)` \cdot \sqrt{\frac{`r Y` \cdot (`r n`-`r Y`)}{`r n`^3}} \right[
+\end{align}
+```
+
+```{r}
+limits2 <- c(Y/n - z*sqrt(Y*(n-Y)/n^3), Y/n + z*sqrt(Y*(n-Y)/n^3))
+limits2
+```
+
+## Interpretar o intervalo
+
+```{r}
+ggplot(data.frame(x=c(0,1), y=c(poss, n-poss)), aes(x=x, y=y)) +
+        geom_bar(stat="identity", fill="#36454F") +
+        ylim(0, n) +
+        geom_hline(yintercept = limits2[1]*n, color = "red", linetype = "dashed") +
+        geom_hline(yintercept = limits2[2]*n, color = "red", linetype = "dashed")
+```
+Eu confio com 99% de certeza que a proporção de pessoas que não possuem óculos da marca Solemio está entre `r round(limits2[1], 2)` e `r round(limits2[2], 2)`.
