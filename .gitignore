@@ -3,3 +3,5 @@ temp.*
 temp/
 .log
 *_files/
+*/.RData
+*/Rhistory
