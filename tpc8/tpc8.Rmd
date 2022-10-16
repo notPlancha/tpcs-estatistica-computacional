@@ -13,6 +13,7 @@ header-includes:
  - \newcommand{\indep}{\perp \!\!\! \perp}
  - "\\newcommand{\\aproxofdist}{\\: \\mathring{\\cap} \\: }"
  - "\\newcommand{\\ofdist}{\\: \\cap \\: }"
+ - \newcommand{\pontocritico}{\overline{\text{x}}_c}
 listings-disable-line-numbers: true
 listings-no-page-break: true
 output:
@@ -22,26 +23,144 @@ output:
 ---
 
 ```{r}
-# libraries
-library()
+#libraries
+library(here)
+library(tibble)
+library(ggplot2)
 ```
 
 
-> Num inquérito sobre óculos de sol foram colocadas várias questões aos inquiridos. Para além 
-de características sociodemográficas (sexo, idade e nível de educação), perguntou-se o tipo 
-de óculos de sol que possuíam, quando tinham sido adquiridos, onde tinham sido adquiridos, 
-quanto tinham custado e se eram da marca SoleMio(SM/RB). 
-Para além destas questões, ainda foram colocadas outras que originaram a construção de 
-um conjunto de indicadores, cada um numa escala contínua de 0 a 10 – fatores que 
+> Num inquérito sobre óculos de sol foram colocadas várias questões aos inquiridos. Para além
+de características sociodemográficas (sexo, idade e nível de educação), perguntou-se o tipo
+de óculos de sol que possuíam, quando tinham sido adquiridos, onde tinham sido adquiridos,
+quanto tinham custado e se eram da marca SoleMio(SM/RB).
+>Para este TPC, irão apenas analisar duas questões: 1. O indicador “Importância do Preço na compra de óculos de sol” – variável Price; e, 2. a questão “are_RB”, que indica se os óculos são ou não da marca SoleMio
+> Para além destas questões, ainda foram colocadas outras que originaram a construção de
+um conjunto de indicadores, cada um numa escala contínua de 0 a 10 – fatores que
 influenciam a compra de óculos de sol.
-Para este TPC, irão apenas analisar duas questões: 1. O indicador “Importância da 
-Publicidade e Marketing na compra de óculos de sol” – variável Pub.Mk; e, 2. a questão 
-“are_RB”, que indica se os óculos são ou não da marca SoleMio
-Os “Fatores que influenciam a compra de óculos de sol” são variáveis que assumem valores 
+>
+> Os “Fatores que influenciam a compra de óculos de sol” são variáveis que assumem valores
 reais no intervalo 0-10, onde 0 corresponde a “nada importante” e 10 corresponde a 
 “extremamente importante”.
 
 ```{r}
 df<- readRDS(here('tpc7', 'Estudo_Oculos_Sol.rds'))
 tibble(df)
+```
+
+# 1
+
+> Será que a importância concedida ao preço está, em termos médios, acima do ponto intermédio da escala (i.e. 5)?
+
+## Escrever as hipóteses
+
+```{=latex}
+\begin{align}
+ &H_0: \mu \leq \mu_0 \label{eq:H0} \\
+ &H_a: \mu > \mu_0 \label{eq:Ha}
+\end{align}
+```
+, sendo $\mu_0 = 5$.
+
+## Escolher o teste adequado
+Como $n$ é suficientemente grande ($n = `r nrow(df)`$) e o desvio padrão $\sigma$ é desconhecida, o teste adequado será:
+
+```{=latex}
+\begin{align}
+ &T = \frac{\overline{X} - \mu_0}{\sfrac{s}{\sqrt{n}}} \aproxofdist \text{n} (0,1) \label{eq:T} \\
+ &\overline{X} \aproxofdist \text{n} (\mu_0, \sfrac{s}{\sqrt{n}})
+\end{align}
+```
+, sendo $\overline{X}$ a média amostral, $S$ o desvio padrão amostral, e $n$ o tamanho da amostra.
+
+## Definir a região crítica e não crítica
+
+Este teste designa-se por teste unilateral à direita, confome a Eq. \ref{eq:H0}, e o nível de significância será $\alpha = 0.05$, conforme o enunciado. Assim, a região crítica $\text{RC}$ e a região de aceitação $\text{RA}$ serão:
+```{=latex}
+\begin{align}
+ \text{RC} &= \{ \overline{X}: \overline{X} \geq \pontocritico \} = \left[ 0; \pontocritico \right] \\
+ \text{RA} &= \{ \overline{X}: \overline{X} < \pontocritico \} = ]\pontocritico; 10]
+\end{align}
+```
+, sendo $\pontocritico = \phi^{-1}(\alpha)$.
+
+```{r warning = FALSE}
+pricePlot <- ggplot(df, aes(x = Price)) +
+  geom_histogram(aes(y = ..density..), binwidth=0.1, fill = 'blue', alpha = 0.5) +
+  geom_density(kernel="gaussian", bw=0.5) +
+  geom_vline(xintercept = 5, color = 'red', linetype = 'dashed')
+xc <- qnorm(1-0.05, mean = mean(df$Price), sd = sd(df$Price))
+#xc <- qnorm(1-0.05, mean = 5, sd = sd(df$Price)/sqrt(nrow(df)))
+pricePlot +
+  geom_segment(x = xc, xend = 10, y = -0.1, yend = -0.1, color = 'red', size = 1) +
+  geom_segment(x = 0, xend = xc, y = -0.1, yend = -0.1, color = 'green', size = 1) +
+  geom_text(x = xc-0.3, y = -0.2, label = 'RA', color = 'green') +
+  geom_text(x = xc+0.3, y = -0.2, label = 'RC', color = 'red') +
+  geom_vline(xintercept = xc, color = 'navy', linetype = 'dashed') +
+  xlim(-0.3, 10) + ylim(-0.3, 0.5)
+```
+```{=latex}
+\begin{align}
+ \pontocritico &= \phi^{-1}(\alpha) = \phi^{-1}(0.05) = `r round(xc, 3)` \\
+ &\therefore \text{RA} = \left[ 0; `r round(xc, 3)` \right] \wedge \text{RC} = \left]`r round(xc, 3)`; 10\right]
+\end{align}
+```
+A regra de decisão será:
+
+1. Se $\overline{X} > `r round(xc, 3)`$, rejeitar $H_0$ (A importância concedida ao preço está, em termos médios, acima do ponto intermédio da escala);
+
+2. Se $\overline{X} \leq `r round(xc, 3)`$, não rejeitar $H_0$ (A importância concedida ao preço não está, em termos médios, acima do ponto intermédio da escala).
+
+## Calcular e verificar se o valor do teste(t) está na região crítica ou não, e tomar a decisão
+
+```{r}
+t.test(df$Price, mu = 5, alternative = 'greater', conf.level = 0.95)
+```
+Como $\overline{X} = `r round(mean(df$Price), 3)` `r ifelse(mean(df$Price) > xc, '>', '\\leq')` `r round(xc, 3)`$, `r ifelse(mean(df$Price) > xc, 'rejeitamos', 'não rejeitamos')` $H_0$, ou seja, a importância concedida ao preço `r ifelse(mean(df$Price) > xc, 'não está', 'está')` em termos médios abaixo do ponto intermédio da escala.
+
+# 2
+
+> Será que homens e mulheres diferem, em termos médios, na importância concedida ao preço?
+
+## Escrever as hipóteses
+
+```{=latex}
+\begin{align}
+ &H_0: \mu_H = \mu_M \equiv \mu_H - \mu_M = 0 \\
+ &H_a: \mu_H \neq \mu_M \equiv \mu_H - \mu_M \neq 0
+\end{align}
+```
+, sendo $\mu_H$ a média da importância concedida ao preço pelos homens e $\mu_M$ a média da importância concedida ao preço pelas mulheres.
+
+## Escolher o teste adequado
+
+Como $n_H$ e $n_M$ são suficientemente grandes ($n_H = `r nrow(df[df$sex == 'Male',])`$ e $n_M = `r nrow(df[df$sex == 'Female',])`$) e o desvio padrão $\sigma$ é desconhecido, o teste adequado será:
+
+```{=latex}
+\begin{align}
+ &T = \frac{\left( \overline{X}_H - \overline{X}_M \right) - (\mu_H - \mu_M)_0}{\sqrt{\frac{S_H^2}{n_H} + \frac{S^2_M}{n_M}}} \aproxofdist \text{n}(0, 1) \\
+ &\left( \overline{X}_H - \overline{X}_M \right) \aproxofdist \text{n}\left(\mu_H - \mu_M, \sqrt{\frac{S_H^2}{n_H} + \frac{S^2_M}{n_M}}\right)
+\end{align}
+```
+
+##  Definir a região crítica e não crítica;
+
+Este teste designa-se por teste bilateral, e as regiões crítica e de aceitação são:
+
+```{=latex}
+\begin{align}
+ \text{RC} &= \{ \overline{X}: \overline{X} \geq \pontocritico \} = \left[ \pontocritico; 10 \right] \cup \left[ -10; -\pontocritico \right] \\
+ \text{RA} &= \{ \overline{X}: \overline{X} < \pontocritico \} = ]-\pontocritico; \pontocritico[
+\end{align}
+```
+, sendo $\pontocritico = \phi^{-1}(\sfrac{\alpha}{2})$ o ponto crítico.
+
+```{r}
+xc2 <- qnorm(1-0.025, mean = mean(df$Price), sd = sd(df$Price))
+xc2
+```
+
+## Calcular e verificar se o valor do teste(t) está na região crítica ou não, e tomar a decisão
+```{r}
+t.test(df$Price ~ df$sex, mu = 0, alternative = 'two.sided', conf.level = 0.95)
 ```
