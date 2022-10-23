@@ -1,8 +1,8 @@
 ---
-title: TPC6 – turma 2 - Resolução
+title: TPC8 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: versão 1.0 - 14/10/2022
-subject: TPC7 - turma 2
+date: versão 1.0 - 16/10/2022
+subject: TPC8 - turma 2
 header-includes:
  - \usepackage{xfrac}
  - \usepackage{comment}
@@ -78,31 +78,21 @@ Como $n$ é suficientemente grande ($n = `r nrow(df)`$) e o desvio padrão $\sig
 Este teste designa-se por teste unilateral à direita, confome a Eq. \ref{eq:H0}, e o nível de significância será $\alpha = 0.05$, conforme o enunciado. Assim, a região crítica $\text{RC}$ e a região de aceitação $\text{RA}$ serão:
 ```{=latex}
 \begin{align}
- \text{RC} &= \{ \overline{X}: \overline{X} \geq \pontocritico \} = \left[ 0; \pontocritico \right] \\
- \text{RA} &= \{ \overline{X}: \overline{X} < \pontocritico \} = ]\pontocritico; 10]
+ \text{RC} &= \{ \overline{X}: \overline{X} \geq \pontocritico \} = ]\pontocritico; +\infty[ \\
+ \text{RA} &= \{ \overline{X}: \overline{X} < \pontocritico \} = \left[ -\infty; \pontocritico \right]
 \end{align}
 ```
 , sendo $\pontocritico = \phi^{-1}(\alpha)$.
 
 ```{r warning = FALSE}
-pricePlot <- ggplot(df, aes(x = Price)) +
-  geom_histogram(aes(y = ..density..), binwidth=0.1, fill = 'blue', alpha = 0.5) +
-  geom_density(kernel="gaussian", bw=0.5) +
-  geom_vline(xintercept = 5, color = 'red', linetype = 'dashed')
-xc <- qnorm(1-0.05, mean = mean(df$Price), sd = sd(df$Price))
-#xc <- qnorm(1-0.05, mean = 5, sd = sd(df$Price)/sqrt(nrow(df)))
-pricePlot +
-  geom_segment(x = xc, xend = 10, y = -0.1, yend = -0.1, color = 'red', size = 1) +
-  geom_segment(x = 0, xend = xc, y = -0.1, yend = -0.1, color = 'green', size = 1) +
-  geom_text(x = xc-0.3, y = -0.2, label = 'RA', color = 'green') +
-  geom_text(x = xc+0.3, y = -0.2, label = 'RC', color = 'red') +
-  geom_vline(xintercept = xc, color = 'navy', linetype = 'dashed') +
-  xlim(-0.3, 10) + ylim(-0.3, 0.5)
+xc <- qnorm(1-0.05, mean = 5, sd = sd(df$Price)/sqrt(nrow(df)))
+xc
 ```
+
 ```{=latex}
 \begin{align}
- \pontocritico &= \phi^{-1}(\alpha) = \phi^{-1}(0.05) = `r round(xc, 3)` \\
- &\therefore \text{RA} = \left[ 0; `r round(xc, 3)` \right] \wedge \text{RC} = \left]`r round(xc, 3)`; 10\right]
+ \pontocritico &= \phi^{-1}(1-\alpha) = \phi^{-1}(1-0.05) = `r round(xc, 3)` \\
+ &\therefore \text{RA} = \left[ 0; `r round(xc, 3)` \right] \wedge \text{RC} = \left]`r round(xc, 3)`; +\infty\right[
 \end{align}
 ```
 A regra de decisão será:
@@ -116,7 +106,7 @@ A regra de decisão será:
 ```{r}
 t.test(df$Price, mu = 5, alternative = 'greater', conf.level = 0.95)
 ```
-Como $\overline{X} = `r round(mean(df$Price), 3)` `r ifelse(mean(df$Price) > xc, '>', '\\leq')` `r round(xc, 3)`$, `r ifelse(mean(df$Price) > xc, 'rejeitamos', 'não rejeitamos')` $H_0$, ou seja, a importância concedida ao preço `r ifelse(mean(df$Price) > xc, 'não está', 'está')` em termos médios abaixo do ponto intermédio da escala.
+Como $\overline{X} =`r round(mean(df$Price), 3)` `r ifelse(mean(df$Price) > xc, '>', '\\leq')` `r round(xc, 3)`$, `r ifelse(mean(df$Price) > xc, 'rejeitamos', 'não rejeitamos')` $H_0$, ou seja, a importância concedida ao preço `r ifelse(mean(df$Price) > xc, 'não está', 'está')` em termos médios abaixo do ponto intermédio da escala.
 
 # 2
 
@@ -149,18 +139,34 @@ Este teste designa-se por teste bilateral, e as regiões crítica e de aceitaç�
 
 ```{=latex}
 \begin{align}
- \text{RC} &= \{ \overline{X}: \overline{X} \geq \pontocritico \} = \left[ \pontocritico; 10 \right] \cup \left[ -10; -\pontocritico \right] \\
- \text{RA} &= \{ \overline{X}: \overline{X} < \pontocritico \} = ]-\pontocritico; \pontocritico[
+ \text{RC} = \left[ \pontocritico; +\infty \right] \cup \left[ -\infty -\pontocritico \right] \\
+ \text{RA} = \left]-\pontocritico; \pontocritico\right[
 \end{align}
 ```
-, sendo $\pontocritico = \phi^{-1}(\sfrac{\alpha}{2})$ o ponto crítico.
+, sendo $\pontocritico = \phi^{-1}(1 - \sfrac{\alpha}{2})$ o ponto crítico.
 
 ```{r}
-xc2 <- qnorm(1-0.025, mean = mean(df$Price), sd = sd(df$Price))
+h <- df[df$sex == 'Male', ]$Price
+m <- df[df$sex == 'Female', ]$Price
+n <- nrow(df)
+xc2 <- qnorm(1-0.025, mean = mean(h) - mean(m), sd= sqrt(((sd(h)^2) / n)+((sd(m)^2) / n)))
 xc2
 ```
+
+```{=latex}
+\begin{align}
+\pontocritico &= \phi^{-1}\left(1 - \sfrac{\alpha}{2}\right) = \phi^{-1}\left(\sfrac{0.05}{2}\right) = `r round(xc2, 3)` \\
+&\therefore \text{RA} = \left]-`r round(xc2, 3)`; `r round(xc2, 3)`\right[ \wedge \text{RC} = \left[ `r round(xc2, 3)`; +\infty \right] \cup \left[ +\infty; -`r round(xc2, 3)` \right]
+\end{align}
+```
+
+A regra de decisão será:
+
+1. Se $\overline{X}_M - \overline{X}_H \in \text{RC}$, rejeitar $H_0$ (A importância concedida ao preço pelos homens e mulheres difere, em termos médios);
+2. Se $\overline{X}_M - \overline{X}_H \notin \text{RC}$, não rejeitar $H_0$ (A importância concedida ao preço pelos homens e mulheres não difere, em termos médios).
 
 ## Calcular e verificar se o valor do teste(t) está na região crítica ou não, e tomar a decisão
 ```{r}
 t.test(df$Price ~ df$sex, mu = 0, alternative = 'two.sided', conf.level = 0.95)
 ```
+Como $\overline{X}_M - \overline{X}_H =`r round(mean(m) - mean(h), 3)` `r ifelse(mean(m) - mean(h) > xc2, '\\in', '\\notin')` \text{RC}$, `r ifelse(mean(m) - mean(h) > xc2, 'rejeitamos', 'não rejeitamos')` $H_0$, ou seja, a importância concedida ao preço pelos homens e mulheres `r ifelse(mean(m) - mean(h) > xc2, 'diferem', 'não diferem')` em termos médios.

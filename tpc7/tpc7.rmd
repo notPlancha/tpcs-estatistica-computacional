@@ -1,7 +1,7 @@
 ---
-title: TPC6 – turma 2 - Resolução
+title: TPC7 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: versão 1.0 - 14/10/2022
+date: versão 1.1 - 23/10/2022
 subject: TPC7 - turma 2
 header-includes:
  - \usepackage{xfrac}

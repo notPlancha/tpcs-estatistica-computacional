@@ -1,7 +1,7 @@
 ---
 title: TPC1 – turma 2 - Resolução
 author: André Plancha - CDB2 - 105289
-date: 24/09/2022
+date: versão 1.1 - 23/10/2022
 subject: TPC1 - turma 2
 header-includes:
     - \usepackage{xfrac}
@@ -18,13 +18,13 @@ output:
 
 Sejam:
 
-* $A_n$ como o lançamento do primeiro dado e calhar $n$, $n \in \mathbb{Z}_6$
+* $A_n$ como o lançamento do primeiro dado e calhar $n$, $n \in \mathbb{Z}_5$
 * $B_n$ como o lançamento do segundo dado e calhar $n$, $n \in \mathbb{Z}_{10}$
 ```{r results = FALSE}
 #libraries
 library(tibble)
 
-dados1 <- data.frame(poss = 1:6, prob = rep(1/6))
+dados1 <- data.frame(poss = 1:6, prob = rep(1/5))
 dados2 <- data.frame(poss = 1:10, prob = rep(1/10))
 ```
 
