@@ -27,3 +27,4 @@ for (i in toProcess){
   )
   print(paste("File outputed if no errors:", here(i, paste0(i, ".pdf"))))
 }
+print("Done")
